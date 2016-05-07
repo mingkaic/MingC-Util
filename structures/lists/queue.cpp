@@ -2,6 +2,8 @@
 //  queue.hpp
 //  List
 //
+//  description: data structure allowing read/write to front/back of list only with first in first out ordering
+//
 //  Created by Mingkai Chen on 2014-06-12.
 //  Copyright © 2014-2016 Mingkai Chen. All rights reserved.
 //
@@ -10,33 +12,28 @@
 
 #include <stdexcept>
 
+// constructs NULL head and tail
+// @remark default constructor
 template <class T>
-void queue<T>::findTail(binode<T>* n)
-    {
-    tail = n;
-    while (NULL != tail->next)
-        {
-        tail = tail->next;
-        }
-    }
-
-template <class T>
-queue<T>::queue(): head(NULL), tail(NULL)
+queue<T>::queue (void): head(NULL), tail(NULL)
     {
     }
 
+// destroys self content, then copy src content to self
+// @remark copy constructor
 template <class T>
-queue<T>::queue(const queue& src) : head(NULL), tail(NULL)
+queue<T>::queue (const queue& src) : head(NULL), tail(NULL)
     {
     if (NULL != src.head)
         {
-        head = src.head->cascadeCopy();
-        findTail(head);
+        head = src.head->cascadeCopy(tail);
         }
     }
 
+// destructor
+// @remark destructor
 template <class T>
-queue<T>::~queue()
+queue<T>::~queue (void)
     {
     if (NULL != head)
         {
@@ -44,6 +41,9 @@ queue<T>::~queue()
         }
     }
 
+// copy assignment operator
+// @param[in]   src     reference to deque object to copy from
+// @return      reference to this after copy assignment
 template <class T>
 queue<T>& queue<T>::operator = (const queue<T>& src)
     {
@@ -57,16 +57,19 @@ queue<T>& queue<T>::operator = (const queue<T>& src)
         
         if (NULL != src.head)
             {
-            head = src.head->cascadeCopy();
-            findTail(head);
+            head = src.head->cascadeCopy(tail);
             }
         }
     
     return *this;
     }
+        
+// add data to front (head) of list
+// @param[in]   data    T type data to add
+// @return      void
 
 template <class T>
-void queue<T>::push_front(T data)
+void queue<T>::push_front (T data)
     {
     head = new binode<T>(NULL, data, head);
     if (NULL == head->next)
@@ -79,8 +82,12 @@ void queue<T>::push_front(T data)
         }
     }
 
+// remove data from back (tail) of list
+// @param[in]   void
+// @return      T type data removed
+
 template <class T>
-T queue<T>::pop_back()
+T queue<T>::pop_back (void)
     {
     // checks for special case: empty list
     if (NULL == head)
@@ -104,8 +111,12 @@ T queue<T>::pop_back()
     return data;
     }
 
+// accesses data from front (head) of list
+// @param[]     void
+// @return      T type data accessed
+
 template <class T>
-T queue<T>::peek_front() const
+T queue<T>::peek_front (void) const
     {
     if (NULL == head)
         {
@@ -115,8 +126,12 @@ T queue<T>::peek_front() const
     return head->getData();
     }
 
+// accesses data from back (tail) of list
+// @param[]     void
+// @return      T type data accessed
+
 template <class T>
-T queue<T>::peek_back() const
+T queue<T>::peek_back (void) const
     {
     if (NULL == head)
         {
@@ -126,8 +141,12 @@ T queue<T>::peek_back() const
     return tail->getData();
     }
 
+// determines if the list is empty
+// @param[]     void
+// @return      true if empty, false otherwise
+
 template <class T>
-bool queue<T>::isEmpty() const
+bool queue<T>::isEmpty (void) const
     {
     return NULL == head;
     }

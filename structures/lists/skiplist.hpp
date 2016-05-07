@@ -2,8 +2,10 @@
 //  skiplist.hpp
 //  List
 //
-//  Created by Mingkai Chen on 2016-02-02.
+//  description: singly linked list featuring O(log(n)) search, and guaranteed sorted order
 //
+//  Created by Mingkai Chen on 2016-02-02.
+//  Copyright © 2014-2016 Mingkai Chen. All rights reserved.
 //
 
 #pragma once
@@ -12,22 +14,54 @@
 
 #include "../dcontainers/gnode.hpp"
 
+// unique skip-list only node
+// each node has a random numberly generated height, which determines the next pointers
+// the lowest height points always points to the very next node
+// N-level nexts point to the next node with height >= N
 template <class T>
 class skipnode : public gnode<T>
 	{
 	private:
-		skipnode(T data, size_t height);
-		void seriesConnection(skipnode<T>* series);
+        // constructs a node containing data and has determined height
+        // @remark private constructor called in copy operations
+        skipnode (T data, size_t height);
+
+        // not so optimized connect current node to every node including and after next
+        // @param[in]   next     pointer to next skipnode to connect
+        // @return      void
+		void seriesConnection (skipnode<T>* next);
+
+        // recursively create a linked deep copy this and nexts and records 
+        // the front most nodes of each level into frontrunner vector reference 
+        // @param[out]  frontrunners     reference to storage vector for front nodes 
+        // @return      deep copy of this
+        skipnode<T>* cascadeCopy (std::vector<skipnode<T>*>& frontrunners);
 	public:
 		skipnode<T>** nexts;
 		size_t height;
-	
-		skipnode(T data);
-		skipnode(T data, skipnode<T>* next);
-		~skipnode();
+
+        // constructs a node containing data and has random height
+        // @remark constructor
+		skipnode (T data);
+
+        // constructs a node containing data and has random height
+        // and connects to nodes at or after next
+        // @remark constructor
+		skipnode (T data, skipnode<T>* next);
+
+        // destructor
+        // @remark destructor
+		~skipnode (void);
 		
-		void cascadeDelete();
-		skipnode<T>* cascadeCopy();
+        // recursively delete this and nodes after this
+        // @param[out]  void
+        // @return      void
+		void cascadeDelete (void);
+
+        // recursively create a linked deep copy this (calls private cascadeCopy)
+        // @param[out]  void
+        // @return      deep copy of this
+		skipnode<T>* cascadeCopy (void);
 	};
 
 template <class T>
@@ -36,18 +70,58 @@ class skiplist
 	private:
 		skipnode<T>* head;
 	public:
-		skiplist();
-		skiplist(const skiplist<T>& src);
-		~skiplist();
+        // constructs NULL head
+        // @remark default constructor
+		skiplist (void);
+
+        // destroys self content, then copy src content to self
+        // @remark copy constructor
+		skiplist (const skiplist<T>& src);
+
+        // destructor
+        // @remark destructor
+		virtual ~skiplist (void);
+
+        // copy assignment operator
+        // @param[in]   src     reference to skiplist object to copy from
+        // @return      reference to this after copy assignment
 		skiplist<T>& operator = (const skiplist<T>& src);
 		
-		bool insert(T data);
-		bool remove(T data);
-		bool search(T data);
-		bool isEmpty();
-		T operator [] (size_t index);
-        size_t size() const;
+        // add data to a sorted position
+        // @param[in]   data    T type data to add
+        // @return      true if data wasn't in the list prior to insertion, false otherwise
+		bool insert (T data);
 
+        // remove data while maintaining sorted order
+        // @param[in]   data    T type data to remove
+        // @return      true if data was found and removed, false otherwise
+		bool remove (T data);
+
+        // search if data exists in list
+        // @param[in]   data    T type data to remove
+        // @return      true if data was found, false otherwise
+		bool search (T data) const;
+
+        // determine if list is empty
+        // @param[]   void
+        // @return      true if list is empty
+		bool isEmpty (void) const;
+
+        // overloaded bracket access operator
+        // @param[in]   index   integer index to access
+        // @remark  throws error if index > size
+        // @return  T type data of data at index
+		T operator [] (size_t index);
+
+        // determine the size of list
+        // @param[]   void
+        // @return  integer size of list
+        size_t size(void) const;
+
+        // streaming operator
+        // @param[out]   out     reference to out-stream
+        // @param[in]    list    instance of this class
+        // @return       out-stream
         friend std::ostream& operator << (std::ostream& out, const skiplist& list) 
             {
             out << "---------------------------------\n";

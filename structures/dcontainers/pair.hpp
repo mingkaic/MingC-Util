@@ -20,6 +20,7 @@ class pair
         K key;
         T data;
     public:
+        pair() {}
         pair(K key); // used for key checking
         pair(K key, T data);
         pair(const pair<K,T>& src);

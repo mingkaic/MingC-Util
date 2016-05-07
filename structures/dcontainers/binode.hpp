@@ -29,6 +29,7 @@ class binode : public gnode<T>
 
         void cascadeDelete();
         virtual binode<T>* cascadeCopy();
+        binode<T>* cascadeCopy(binode<T>*& end, bool gotohead = true);
     };
 
 #include "binode.cpp"

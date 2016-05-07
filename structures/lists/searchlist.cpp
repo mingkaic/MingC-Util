@@ -2,6 +2,8 @@
 //  searchlist.cpp
 //  List
 //
+//  description: doubly linked list featuring linear search, replacement, n-insertion, n-access, along with deque functions
+//
 //  Created by Ming Kai Chen on 2014-07-15.
 //  Copyright (c) 2014 Ming Kai Chen. All rights reserved.
 //
@@ -11,10 +13,17 @@
 #include "../dcontainers/binode.hpp"
 #include "deque.hpp"
 
+// destroys self content, then copy src content to self
+// @remark copy constructor
+
 template <class T>
-searchlist<T>::searchlist(const searchlist& src) : deque<T>(src)
+searchlist<T>::searchlist (const searchlist& src) : deque<T>(src)
     {
     }
+
+// copy assignment operator
+// @param[in]   src     reference to searchlist object to copy from
+// @return      reference to this after copy assignment
 
 template <class T>
 searchlist<T>& searchlist<T>::operator = (const searchlist<T>& src)
@@ -23,8 +32,12 @@ searchlist<T>& searchlist<T>::operator = (const searchlist<T>& src)
     return *this;
     }
 
+// search for the index of elem
+// @param[in]   elem     T typed data to search for
+// @return      index of element in list if found, -1 otherwise
+
 template <class T>
-signed searchlist<T>::search(T elem)
+signed searchlist<T>::search (T elem)
     {
     size_t index = 0;
     binode<T>* buffer = this->head;
@@ -36,8 +49,12 @@ signed searchlist<T>::search(T elem)
     return NULL == buffer ? -1 : index;
     }
 
+// insert elem at index N
+// @param[in]   elem     T typed data to insert
+// @param[in]   N        integer index to insert elem
+
 template <class T>
-void searchlist<T>::nInsert(T elem, size_t N)
+void searchlist<T>::nInsert (T elem, size_t N)
     {
     binode<T>* buffer = this->head;
     for (size_t i = 0; i < N && NULL != buffer; i++)
@@ -68,8 +85,12 @@ void searchlist<T>::nInsert(T elem, size_t N)
         }
     }
 
+// remove elem at index N
+// @param[in]   N        integer index to remove elem
+// @return      void
+
 template <class T>
-T searchlist<T>::nRemove(size_t N)
+T searchlist<T>::nRemove (size_t N)
     {
     if (NULL == this->head)
         {
@@ -108,8 +129,12 @@ T searchlist<T>::nRemove(size_t N)
     return removeData;
     }
 
+// get elem at index N
+// @param[in]   N        integer index to get elem
+// @return      T typed data at index N
+
 template <class T>
-T searchlist<T>::nPeek(size_t N) const
+T searchlist<T>::nPeek (size_t N) const
     {
     if (NULL == this->head)
         {
@@ -128,9 +153,14 @@ T searchlist<T>::nPeek(size_t N) const
         
     return buffer->getData();
     }
+
+// replace data at index N with elem
+// @param[in]   elem     T typed data to replace data at index N
+// @param[in]   N        integer index
+// @return      T typed old (replaced) data 
     
 template <class T>
-T searchlist<T>::nReplace(T elem, size_t N)
+T searchlist<T>::nReplace (T elem, size_t N)
     {
     if (NULL == this->head)
         {
@@ -169,9 +199,13 @@ T searchlist<T>::nReplace(T elem, size_t N)
         
     return removeData;
     }
+        
+// find the size of the list
+// @param[]     void
+// @return      integer size of list
 
 template <class T>
-size_t searchlist<T>::size() const
+size_t searchlist<T>::size (void) const
     {
     size_t incr = 0;
     for (binode<T>* buffer = this->head; NULL != buffer; buffer = buffer->next)

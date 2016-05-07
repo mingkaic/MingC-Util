@@ -26,6 +26,7 @@ template <class T>
 void binode<T>::cascadeDelete()
     {
     binode<T>* buffer = NULL;
+
     while (NULL != prev)
         {
         buffer = prev;
@@ -44,19 +45,34 @@ void binode<T>::cascadeDelete()
 template <class T>
 binode<T>* binode<T>::cascadeCopy()
     {
+    binode<T>* end = NULL;
+    return cascadeCopy(end, true);
+    }
+
+template <class T>
+binode<T>* binode<T>::cascadeCopy(binode<T>*& end, bool gotohead)
+    {
     binode<T>* copy = new binode<T>(this->data);
     binode<T>* buffer = copy;
     for (binode<T>* src = prev; NULL != src; src = src->prev)
         {
-        buffer->prev = new binode<T>(buffer, src->getData(), NULL);
+        buffer->prev = new binode<T>(NULL, src->getData(), buffer);
         buffer = buffer->prev;
         }
-    buffer = copy;
+    binode<T>* storage = copy;
+    // swap copy (returning value) and buffer (the true head)
+    if (true == gotohead)
+        {
+        copy = buffer;
+        }
+    buffer = storage;
     for (binode<T>* src = next; NULL != src; src = src->next)
         {
-        buffer->next = new binode<T>(NULL, src->getData(), buffer);
+        buffer->next = new binode<T>(buffer, src->getData(), NULL);
         buffer = buffer->next;
         }
+    end = buffer;
+
     return copy;
     }
 

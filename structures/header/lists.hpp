@@ -1,0 +1,6 @@
+#include "../lists/deque.hpp"
+#include "../lists/dynamicarr.hpp"
+#include "../lists/queue.hpp"
+#include "../lists/searchlist.hpp"
+#include "../lists/skiplist.hpp"
+#include "../lists/stack.hpp"

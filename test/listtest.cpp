@@ -1,6 +1,7 @@
 #include "../structures/header/lists.hpp"
 #include <algorithm>
 
+// ------------ CHECK INITIAL STATES ----------------- //
 TEST(INIT, deque)
 	{
 	deque<size_t> 	inst;
@@ -55,7 +56,7 @@ TEST(INIT, stack)
 	delete ptr;
 	}
 
-// data entry
+// ------------ DATA ENTRY ----------------- //
 TEST(DATA_ENTRY, deque)
 	{
 	deque<double> 		back2back;
@@ -260,6 +261,324 @@ TEST(DATA_ENTRY, stack)
 		}
 
 	EXPECT_TRUE(s.isEmpty());
+	}
+
+// ------------ COPY STRUCTURES ----------------- //
+TEST(COPY, deque)
+	{
+	deque<double> 		empty;
+	deque<double> 		emptycopy(empty);
+	deque<double> 		emptycopyassign;
+	emptycopyassign = empty;
+
+	ASSERT_TRUE(empty.isEmpty());
+	EXPECT_TRUE(emptycopy.isEmpty());
+	EXPECT_TRUE(emptycopyassign.isEmpty());
+
+	deque<double> 		orig;
+	deque<double> 		copyassign;
+	deque<double> 		recopyassign;
+	std::vector<double> store;
+
+	for (double data = getTestData();
+		data >= 0;
+		data = getTestData()) 
+		{
+		orig.push_back(data);
+		recopyassign.push_front(data); // different data order
+		store.push_back(data);
+		}
+
+	deque<double> 		copy(orig);
+	copyassign = orig;
+	recopyassign = orig;
+
+	for (std::vector<double>::iterator it = store.begin(); 
+		it != store.end(); 
+		it++) 
+		{
+		ASSERT_EQ(orig.peek_front(), *it);
+		ASSERT_EQ(orig.pop_front(), *it);
+		EXPECT_EQ(copy.peek_front(), *it);
+		EXPECT_EQ(copy.pop_front(), *it);
+		EXPECT_EQ(copyassign.peek_front(), *it);
+		EXPECT_EQ(copyassign.pop_front(), *it);
+		EXPECT_EQ(recopyassign.peek_front(), *it);
+		EXPECT_EQ(recopyassign.pop_front(), *it);
+		}
+
+	ASSERT_TRUE(orig.isEmpty());
+	EXPECT_TRUE(copy.isEmpty());
+	EXPECT_TRUE(copyassign.isEmpty());
+	EXPECT_TRUE(recopyassign.isEmpty());
+	}
+
+TEST(COPY, dynamicarr)
+	{
+	dynamicarr<double>  empty;
+	dynamicarr<double>  emptycopy(empty);
+	dynamicarr<double>  emptycopyassign;
+	emptycopyassign = empty;
+
+	ASSERT_EQ(empty[0], 0);
+	EXPECT_EQ(emptycopy[0], 0);
+	EXPECT_EQ(emptycopyassign[0], 0);
+
+	dynamicarr<double> 		orig;
+	dynamicarr<double> 		copyassign;
+	dynamicarr<double> 		recopyassign;
+	std::vector<double> store;
+	size_t index = 0;
+
+	for (double data = getTestData();
+		data >= 0;
+		data = getTestData()) 
+		{
+		orig[index] = data;
+		recopyassign[index] = data;
+		store.push_back(data);
+		index++;
+		}
+
+	dynamicarr<double> 		copy(orig);
+	copyassign = orig;
+	recopyassign = orig;
+
+	index = 0;
+	for (std::vector<double>::iterator it = store.begin(); 
+		it != store.end(); 
+		it++) 
+		{
+		ASSERT_EQ(orig[index], *it);
+		EXPECT_EQ(copy[index], *it);
+		EXPECT_EQ(copyassign[index], *it);
+		EXPECT_EQ(recopyassign[index], *it);
+		index++;
+		}
+	}
+
+TEST(COPY, queue)
+	{
+	queue<double>  empty;
+	queue<double>  emptycopy(empty);
+	queue<double>  emptycopyassign;
+	emptycopyassign = empty;
+
+	ASSERT_TRUE(empty.isEmpty());
+	EXPECT_TRUE(emptycopy.isEmpty());
+	EXPECT_TRUE(emptycopyassign.isEmpty());
+
+	queue<double> 		orig;
+	queue<double> 		copyassign;
+	queue<double> 		recopyassign;
+	std::vector<double> store;
+
+	for (double data = getTestData();
+		data >= 0;
+		data = getTestData()) 
+		{
+		orig.push_front(data);
+		recopyassign.push_front(data);
+		store.push_back(data);
+		}
+
+	queue<double> 		copy(orig);
+	copyassign = orig;
+	recopyassign = orig;
+	for (std::vector<double>::iterator it = store.begin(); 
+		it != store.end(); 
+		it++) 
+		{
+		ASSERT_EQ(orig.peek_back(), *it);
+		EXPECT_EQ(copy.peek_back(), *it);
+		EXPECT_EQ(copyassign.peek_back(), *it);
+		EXPECT_EQ(recopyassign.peek_back(), *it);
+
+		ASSERT_EQ(orig.pop_back(), *it);
+		EXPECT_EQ(copy.pop_back(), *it);
+		EXPECT_EQ(copyassign.pop_back(), *it);
+		EXPECT_EQ(recopyassign.pop_back(), *it);
+		}
+
+	ASSERT_TRUE(orig.isEmpty());
+	EXPECT_TRUE(copy.isEmpty());
+	EXPECT_TRUE(copyassign.isEmpty());
+	EXPECT_TRUE(recopyassign.isEmpty());
+	}
+
+TEST(COPY, searchlist)
+	{
+	searchlist<double>  empty;
+	searchlist<double>  emptycopy(empty);
+	searchlist<double>  emptycopyassign;
+	emptycopyassign = empty;
+
+	ASSERT_EQ(empty.size(), 0);
+	EXPECT_EQ(emptycopy.size(), 0);
+	EXPECT_EQ(emptycopyassign.size(), 0);
+
+	searchlist<double> 	orig;
+	searchlist<double> 		copyassign;
+	searchlist<double> 		recopyassign;
+	std::vector<double> store;
+	size_t index = 0;
+
+	for (double data = getTestData();
+		data >= 0;
+		data = getTestData()) 
+		{
+		orig.nInsert(data, index);
+		recopyassign.nInsert(data, index);
+		store.push_back(data);
+		index++;
+		}
+
+	searchlist<double> 		copy(orig);
+	copyassign = orig;
+	recopyassign = orig;
+
+	for (std::vector<double>::iterator it = store.begin(); 
+		it != store.end(); 
+		it++) 
+		{
+		ASSERT_EQ(orig.nRemove(0), *it);
+		EXPECT_EQ(copy.nRemove(0), *it);
+		EXPECT_EQ(copyassign.nRemove(0), *it);
+		EXPECT_EQ(recopyassign.nRemove(0), *it);
+		}
+
+	ASSERT_EQ(orig.size(), 0);
+	EXPECT_EQ(copy.size(), 0);
+	EXPECT_EQ(copyassign.size(), 0);
+	EXPECT_EQ(recopyassign.size(), 0);
+	}
+
+TEST(COPY, skiplist)
+	{
+	skiplist<double>  empty;
+	skiplist<double>  emptycopy(empty);
+	skiplist<double>  emptycopyassign;
+	emptycopyassign = empty;
+
+	ASSERT_TRUE(empty.isEmpty());
+	EXPECT_TRUE(emptycopy.isEmpty());
+	EXPECT_TRUE(emptycopyassign.isEmpty());
+
+	skiplist<double> 	orig;
+	skiplist<double> 	copyassign;
+	skiplist<double> 	recopyassign;
+	std::vector<double> store;
+
+	for (double data = getTestData();
+		data >= 0;
+		data = getTestData()) 
+		{
+		if (true == orig.insert(data))
+			{
+			recopyassign.insert(data);
+			store.push_back(data);
+			}
+		}
+
+	skiplist<double> 		copy(orig);
+	copyassign = orig;
+	recopyassign = orig;
+
+	for (std::vector<double>::iterator it = store.begin(); 
+		it != store.end(); 
+		it++) 
+		{
+		ASSERT_TRUE(orig.remove(*it));
+		EXPECT_TRUE(copy.remove(*it));
+		EXPECT_TRUE(copyassign.remove(*it));
+		EXPECT_TRUE(recopyassign.remove(*it));
+		}
+	ASSERT_TRUE(orig.isEmpty());
+	EXPECT_TRUE(copy.isEmpty());
+	EXPECT_TRUE(copyassign.isEmpty());
+	EXPECT_TRUE(recopyassign.isEmpty());
+	}
+
+TEST(COPY, stack)
+	{
+	stack<double>  empty;
+	stack<double>  emptycopy(empty);
+	stack<double>  emptycopyassign;
+	emptycopyassign = empty;
+
+	ASSERT_TRUE(empty.isEmpty());
+	EXPECT_TRUE(emptycopy.isEmpty());
+	EXPECT_TRUE(emptycopyassign.isEmpty());
+
+	stack<double> 	orig;
+	stack<double> 	copyassign;
+	stack<double> 	recopyassign;
+	std::vector<double> store;
+
+	for (double data = getTestData();
+		data >= 0;
+		data = getTestData()) 
+		{
+		orig.push(data);
+		recopyassign.push(data);
+		store.push_back(data);
+		}
+
+	stack<double> 		copy(orig);
+	copyassign = orig;
+	recopyassign = orig;
+	std::reverse(store.begin(), store.end());
+
+	for (std::vector<double>::iterator it = store.begin(); 
+		it != store.end(); 
+		it++) 
+		{
+		ASSERT_EQ(orig.peek(), *it);
+		EXPECT_EQ(copy.peek(), *it);
+		EXPECT_EQ(copyassign.peek(), *it);
+		EXPECT_EQ(recopyassign.peek(), *it);
+
+		ASSERT_EQ(orig.pop(), *it);
+		EXPECT_EQ(copy.pop(), *it);
+		EXPECT_EQ(copyassign.pop(), *it);
+		EXPECT_EQ(recopyassign.pop(), *it);
+		}
+
+	ASSERT_TRUE(orig.isEmpty());
+	EXPECT_TRUE(copy.isEmpty());
+	EXPECT_TRUE(copyassign.isEmpty());
+	EXPECT_TRUE(recopyassign.isEmpty());
+	}
+
+// ------------ SEARCH FUNCTIONS ----------------- //
+TEST(SEARCH, dynamicarr)
+	{
+	dynamicarr<double> 	arr;
+	std::vector<double> store;
+	std::vector<double> uniques;
+	size_t index = 0;
+
+	for (double data = getTestData();
+		data >= 0;
+		data = getTestData()) 
+		{
+		arr[index] = data;
+		store.push_back(data);
+		index++;
+		}
+
+	index = 0;
+	for (std::vector<double>::iterator it = store.begin(); 
+		it != store.end(); 
+		it++) 
+		{
+		if (uniques.end() == find(uniques.begin(), uniques.end(), *it)) 
+			{
+			EXPECT_EQ(arr.indexOf(*it), index);
+			uniques.push_back(*it);
+			}
+		index++;
+		}
 	}
 
 TEST(SEARCH, searchlist)

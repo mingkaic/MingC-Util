@@ -1,9 +1,10 @@
-#include "../structures/header/maps.hpp"
 #include "../structures/header/trees.hpp"
 #include <gtest/gtest.h>
+#include <cstdlib>
 #include "readtest.cpp"
 #include "listtest.cpp"
-#include <cstdlib>
+//#include "maptest.cpp"
+//#include "sptest.cpp"
 
 int main(int argc, char* argv[]) 
 	{
