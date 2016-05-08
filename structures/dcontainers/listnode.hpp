@@ -17,16 +17,16 @@ template <class T>
 class listnode : public gnode<T>
     {
     protected:
-        listnode<T>(){next = NULL;}
+        listnode<T> (void) {next = NULL;}
     public:
         listnode<T>* next;
         
-        listnode(T data);
-        listnode(T data, listnode<T>* next);
-        virtual ~listnode() {}
+        listnode (T data);
+        listnode (T data, listnode<T>* next);
+        virtual ~listnode (void) {}
         
-        void cascadeDelete();
-        virtual listnode<T>* cascadeCopy();
+        void cascadeDelete (void);
+        virtual listnode<T>* cascadeCopy (void);
     };
 
 #include "listnode.cpp"

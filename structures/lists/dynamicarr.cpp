@@ -96,10 +96,10 @@ T& dynamicarr<T>::operator [] (size_t index)
 // @return      index of the elem if found, -1 otherwise
 
 template <class T>
-signed dynamicarr<T>::indexOf (T elem, equality<T> eqCb) const
+signed dynamicarr<T>::indexOf (T elem) const
     {
     signed index = 0;
-    while (index < allocSize && false == eqCb(array[index], elem))
+    while (index < allocSize && false == this->C.equals(array[index], elem))
         {
         index++;
         }

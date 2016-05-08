@@ -12,11 +12,12 @@
 #ifndef __SEARCH_LIST__H
 #define __SEARCH_LIST__H
 
-#include "deque.hpp"
 #include <iostream>
+#include "deque.hpp"
+#include "../oop/compare.hpp"
 
 template <class T>
-class searchlist : public deque<T>
+class searchlist : public deque<T>, public compManage<T>
     {
     public:
         // constructs NULL head and tail

@@ -17,23 +17,23 @@ class ptreenode : public gnode<T>
     {
     private:
         enum direction {LEFT, RIGHT, TOP};
-        ptreenode<T>* copyHelper(direction caller, ptreenode<T>* from);
-        void trickleDelete();
+        ptreenode<T>* copyHelper (direction caller, ptreenode<T>* from);
+        void trickleDelete (void);
     protected:
-        ptreenode(){left = right = parent = NULL;}
+        ptreenode (void) {left = right = parent = NULL;}
     public:
         ptreenode<T>* left;
         ptreenode<T>* right;
         ptreenode<T>* parent;
         
-        ptreenode(T data);
-        virtual ~ptreenode(){}
+        ptreenode (T data);
+        virtual ~ptreenode (void){}
         
-        void cascadeDelete();
-        virtual ptreenode<T>* cascadeCopy();
+        void cascadeDelete (void);
+        virtual ptreenode<T>* cascadeCopy (void);
 
-        void injectData(T data){this->dataInit(data);}
-        T& getDataRef(){return this->data;}
+        void injectData (T data) {this->dataInit(data);}
+        T& getDataRef (void) {return this->data;}
     };
 
 #include "ptreenode.cpp"

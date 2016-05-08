@@ -18,18 +18,18 @@ template <class T>
 class binode : public gnode<T>
     {
     protected:
-        binode(){prev = next = NULL;}
+        binode (void) {prev = next = NULL;}
     public:
         binode<T>* prev;
         binode<T>* next;
         
-        binode(T data);
-        binode(binode<T>* prev, T data, binode<T>* next);
-        virtual ~binode() {}
+        binode (T data);
+        binode (binode<T>* prev, T data, binode<T>* next);
+        virtual ~binode (void) {}
 
-        void cascadeDelete();
-        virtual binode<T>* cascadeCopy();
-        binode<T>* cascadeCopy(binode<T>*& end, bool gotohead = true);
+        void cascadeDelete (void);
+        virtual binode<T>* cascadeCopy (void);
+        binode<T>* cascadeCopy (binode<T>*& end, bool gotohead = true);
     };
 
 #include "binode.cpp"

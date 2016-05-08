@@ -41,7 +41,7 @@ signed searchlist<T>::search (T elem)
     {
     size_t index = 0;
     binode<T>* buffer = this->head;
-    while (NULL != buffer && elem != buffer->getData())
+    while (NULL != buffer && false == this->C.equals(elem, buffer->getData()))
         { 
         buffer = buffer->next;
         index++;

@@ -11,23 +11,23 @@
 #include <cstdlib>
 
 template <class T>
-pcontainer<T>::pcontainer(T content) : content(content)
+pcontainer<T>::pcontainer (T content) : content(content)
     {
     priority = rand();
     }
 
 template <class T>
-pcontainer<T>::pcontainer(T content, size_t priority) : content(content), priority(priority)
+pcontainer<T>::pcontainer (T content, size_t priority) : content(content), priority(priority)
     {
     }
 
 template <class T>
-pcontainer<T>::pcontainer(const pcontainer<T>& src) : content(src.content), priority(src.priority)
+pcontainer<T>::pcontainer (const pcontainer<T>& src) : content(src.content), priority(src.priority)
     {
     }
 
 template <class T>
-pcontainer<T>::~pcontainer()
+pcontainer<T>::~pcontainer (void)
     {
     }
 
@@ -43,13 +43,13 @@ pcontainer<T>& pcontainer<T>::operator = (const pcontainer<T>& src)
     }
 
 template <class T>
-T& pcontainer<T>::getContent()
+T& pcontainer<T>::getContent (void)
     {
     return content;
     }
         
 template <class T>
-size_t pcontainer<T>::getPriority()
+size_t pcontainer<T>::getPriority (void)
     {
     return priority;
     }

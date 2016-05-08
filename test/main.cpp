@@ -4,10 +4,11 @@
 #include "readtest.cpp"
 #include "listtest.cpp"
 //#include "maptest.cpp"
-//#include "sptest.cpp"
+#include "sptest.cpp"
 
 int main(int argc, char* argv[]) 
 	{
+	SP_RTInit();
 	srand(0); // repeatable
 	setenv("PYTHONPATH",".",1);
 	readdir();

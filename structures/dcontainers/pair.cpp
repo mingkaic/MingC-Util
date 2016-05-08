@@ -10,22 +10,22 @@
 #ifdef __PAIR__H
 
 template <class K, class T>
-pair<K, T>::pair(K key) : key(key)
+pair<K, T>::pair (K key) : key(key)
     {
     }
 
 template <class K, class T>
-pair<K, T>::pair(K key, T data) : key(key), data(data)
+pair<K, T>::pair (K key, T data) : key(key), data(data)
     {
     }
 
 template <class K, class T>
-pair<K, T>::pair(const pair<K, T>& src) : key(src.key), data(src.data)
+pair<K, T>::pair (const pair<K, T>& src) : key(src.key), data(src.data)
     {
     }
 
 template <class K, class T>
-pair<K, T>::~pair()
+pair<K, T>::~pair (void)
     {
     }
 
@@ -41,25 +41,25 @@ pair<K, T>& pair<K, T>::operator = (const pair<K, T>& src)
     }
 
 template <class K, class T>
-K pair<K, T>::getKey()
+K pair<K, T>::getKey (void)
     {
     return key;
     }
 
 template <class K, class T>
-K& pair<K, T>::getKeyRef()
+K& pair<K, T>::getKeyRef (void)
     {
     return key;
     }
 
 template <class K, class T>
-T pair<K, T>::getData()
+T pair<K, T>::getData (void)
     {
     return data;
     }
     
 template <class K, class T>
-T& pair<K, T>::getDataRef()
+T& pair<K, T>::getDataRef (void)
     {
     return data;
     }

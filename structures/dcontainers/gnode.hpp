@@ -21,9 +21,9 @@ class gnode
         T data;
         virtual void dataInit(T data){this->data = data;}
     public:
-        virtual ~gnode() {}
-        virtual void cascadeDelete   () = 0;
-        virtual gnode<T>* cascadeCopy () = 0;
+        virtual ~gnode (void) {}
+        virtual void cascadeDelete   (void) = 0;
+        virtual gnode<T>* cascadeCopy (void) = 0;
 
         T getData()const{return data;}
     };

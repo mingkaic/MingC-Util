@@ -10,20 +10,20 @@
 #ifdef __BI_NODE__H
 
 template <class T>
-binode<T>::binode(T data) : prev(NULL), next(NULL)
+binode<T>::binode (T data) : prev(NULL), next(NULL)
     {
     this->dataInit(data);
     }
 
 template <class T>
-binode<T>::binode(binode<T>* prev, T data, binode<T>* next) :
+binode<T>::binode (binode<T>* prev, T data, binode<T>* next) :
 prev(prev), next(next)
     {
     this->dataInit(data);
     }
 
 template <class T>
-void binode<T>::cascadeDelete()
+void binode<T>::cascadeDelete (void)
     {
     binode<T>* buffer = NULL;
 
@@ -43,14 +43,14 @@ void binode<T>::cascadeDelete()
     }
 
 template <class T>
-binode<T>* binode<T>::cascadeCopy()
+binode<T>* binode<T>::cascadeCopy (void)
     {
     binode<T>* end = NULL;
     return cascadeCopy(end, true);
     }
 
 template <class T>
-binode<T>* binode<T>::cascadeCopy(binode<T>*& end, bool gotohead)
+binode<T>* binode<T>::cascadeCopy (binode<T>*& end, bool gotohead)
     {
     binode<T>* copy = new binode<T>(this->data);
     binode<T>* buffer = copy;

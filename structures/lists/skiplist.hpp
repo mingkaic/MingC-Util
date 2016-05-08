@@ -65,7 +65,7 @@ class skipnode : public gnode<T>
 	};
 
 template <class T>
-class skiplist
+class skiplist : public compManage<T>
 	{
 	private:
 		skipnode<T>* head;

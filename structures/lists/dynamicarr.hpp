@@ -13,6 +13,7 @@
 #define __DYNAMIC_ARR__H
 
 #include <string>
+#include "../oop/compare.hpp"
 
 template <class T>
 using equality = bool (*)(const T&, const T&);
@@ -24,7 +25,7 @@ bool genericEquality(const T& o1, const T& o2) {
 
 // dynamically increasing array
 template <class T>
-class dynamicarr
+class dynamicarr : public compManage<T>
     {    
     private:
         T* array;
@@ -60,9 +61,8 @@ class dynamicarr
         // finds the index of the first instance of element
         // determines equality using input function following signature: bool (*)(const T&, const T&);
         // @param[in]   elem     element to search for
-        // @param[in]   eqCb     optional equality function (defaults to ==)
         // @return      index of the elem if found, -1 otherwise
-        signed indexOf (T elem, equality<T> eqCb = genericEquality) const;
+        signed indexOf (T elem) const;
     };
     
 #include "dynamicarr.cpp"

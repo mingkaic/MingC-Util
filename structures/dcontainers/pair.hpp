@@ -20,17 +20,16 @@ class pair
         K key;
         T data;
     public:
-        pair() {}
-        pair(K key); // used for key checking
-        pair(K key, T data);
-        pair(const pair<K,T>& src);
-        ~pair();
+        pair (K key); // used for key checking
+        pair (K key, T data);
+        pair (const pair<K,T>& src);
+        ~pair (void);
         pair<K,T>& operator = (const pair<K,T>& src);
         
-        K getKey();
-        K& getKeyRef();
-        T getData();
-        T& getDataRef();
+        K getKey (void);
+        K& getKeyRef (void);
+        T getData (void);
+        T& getDataRef (void);
     };
 
 template <class K, class T>

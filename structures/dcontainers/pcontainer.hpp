@@ -17,14 +17,14 @@ class pcontainer
         size_t priority;
         T content;
     public:
-        pcontainer(T content);
-        pcontainer(T content, size_t priority);
-        pcontainer(const pcontainer<T>& src);
-        ~pcontainer();
+        pcontainer (T content);
+        pcontainer (T content, size_t priority);
+        pcontainer (const pcontainer<T>& src);
+        ~pcontainer (void);
         pcontainer<T>& operator = (const pcontainer<T>& src);
         
-        T& getContent();
-        size_t getPriority();
+        T& getContent (void);
+        size_t getPriority (void);
     };
     
 template <class T>

@@ -10,19 +10,19 @@
 #ifdef __LIST_NODE__H
 
 template <class T>
-listnode<T>::listnode(T data) : next(NULL)
+listnode<T>::listnode (T data) : next(NULL)
     {
     this->dataInit(data);
     }
 
 template <class T>
-listnode<T>::listnode(T data, listnode<T>* next) : next(next)
+listnode<T>::listnode (T data, listnode<T>* next) : next(next)
     {
     this->dataInit(data);
     }
 
 template <class T>
-void listnode<T>::cascadeDelete()
+void listnode<T>::cascadeDelete (void)
     {
     if (NULL != next)
         {
@@ -32,7 +32,7 @@ void listnode<T>::cascadeDelete()
     }
 
 template <class T>
-listnode<T>* listnode<T>::cascadeCopy()
+listnode<T>* listnode<T>::cascadeCopy (void)
     {
     listnode<T>* copy = new listnode<T>(this->data);
     listnode<T>* buffer = copy;

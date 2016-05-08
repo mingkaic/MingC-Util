@@ -11,14 +11,14 @@
 #include <cstdlib>
 
 template <class T>
-treenode<T>::treenode(T data)
+treenode<T>::treenode (T data)
     {
     this->dataInit(data);
     this->left = this->right = NULL;
     }
 
 template <class T>
-void treenode<T>::cascadeDelete()
+void treenode<T>::cascadeDelete (void)
     {
     if (NULL != this->left)
         {
@@ -31,7 +31,7 @@ void treenode<T>::cascadeDelete()
     }
 
 template <class T>
-treenode<T>* treenode<T>::cascadeCopy()
+treenode<T>* treenode<T>::cascadeCopy (void)
     {
     treenode<T>* cpy = new treenode<T>(this->data);
     if (NULL != left)

@@ -11,7 +11,7 @@
 #include <cstdlib>
 
 template <class T>
-ptreenode<T>* ptreenode<T>::copyHelper(direction caller, ptreenode<T>* from)
+ptreenode<T>* ptreenode<T>::copyHelper (direction caller, ptreenode<T>* from)
     {
     ptreenode<T>* cpy = new ptreenode<T>(this->data);
     if (NULL != left)
@@ -53,7 +53,7 @@ ptreenode<T>* ptreenode<T>::copyHelper(direction caller, ptreenode<T>* from)
     }
 
 template <class T>
-void ptreenode<T>::trickleDelete()
+void ptreenode<T>::trickleDelete (void)
     {
     if (NULL != left)
         {
@@ -67,14 +67,14 @@ void ptreenode<T>::trickleDelete()
     }
 
 template <class T>
-ptreenode<T>::ptreenode(T data) :
+ptreenode<T>::ptreenode (T data) :
 left(NULL), right(NULL), parent(NULL)
     {
     this->dataInit(data);
     }
 
 template <class T>
-void ptreenode<T>::cascadeDelete()
+void ptreenode<T>::cascadeDelete (void)
     {
     ptreenode<T>* buffer = this;
     while (NULL != buffer->parent)
@@ -85,7 +85,7 @@ void ptreenode<T>::cascadeDelete()
     }
 
 template <class T>
-ptreenode<T>* ptreenode<T>::cascadeCopy()
+ptreenode<T>* ptreenode<T>::cascadeCopy (void)
     {
     ptreenode<T>* cpy = new ptreenode<T>(this->data);
     

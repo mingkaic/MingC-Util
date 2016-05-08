@@ -16,18 +16,18 @@ template <class T>
 class treenode : public gnode<T>
     {
     protected:
-        treenode(){left = right = NULL;}
+        treenode (void) {left = right = NULL;}
     public:
         treenode<T>* left;
         treenode<T>* right;
         
-        treenode(T data);
-        virtual ~treenode() {}
+        treenode (T data);
+        virtual ~treenode (void) {}
         
-        void cascadeDelete();
-        virtual treenode<T>* cascadeCopy();
+        void cascadeDelete (void);
+        virtual treenode<T>* cascadeCopy (void);
 
-        void injectData(T data) {this->dataInit(data);}
+        void injectData (T data) {this->dataInit(data);}
     };
 
 #include "treenode.cpp"
