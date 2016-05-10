@@ -2,6 +2,8 @@
 //  pcontainer.cpp
 //  dataContainer
 //
+//  description: data wrapper with randomly generated priority value
+//
 //  Created by Ming Kai Chen on 2015-09-30.
 //  Copyright (c) 2015 Ming Kai Chen. All rights reserved.
 //

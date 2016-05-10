@@ -4,14 +4,18 @@
 #include <fstream>
 #include <iostream>
 #include <cstring>
+#include <string>
 #include "prodcons.cpp"
-static const char* directory = "tests";
+static const std::string numdirectory = "tests/number/";
+static const std::string strdirectory = "tests/string/";
 static const char* readDirPython = "readdir";
 static const char* readDirFunc = "readdir";
-static PCBuffer buffer;
+static PCBuffer<double> numbuffer;
+static PCBuffer<std::string> strbuffer;
 static std::mutex sleep_mu;
 
-std::vector<std::string>* readDirectory(const char* directory) {
+std::vector<std::string>* readDirectory(const char* directory) 
+    {
 	PyObject *pName, *pModule, *pDict, *pFunc;
     PyObject *pArgs, *pValue;
     int i;
@@ -23,92 +27,137 @@ std::vector<std::string>* readDirectory(const char* directory) {
     pModule = PyImport_Import(pName);
     Py_DECREF(pName);
 
-    if (pModule != NULL) {
+    if (pModule != NULL) 
+        {
         pFunc = PyObject_GetAttrString(pModule, readDirFunc);
 
-        if (pFunc && PyCallable_Check(pFunc)) {
+        if (pFunc && PyCallable_Check(pFunc)) 
+            {
             pArgs = PyTuple_New(1);
             pValue = PyString_FromString(directory);
             PyTuple_SetItem(pArgs, i, pValue);
 
             pValue = PyObject_CallObject(pFunc, pArgs);
             Py_DECREF(pArgs);
-            if (pValue != NULL) {
+            if (pValue != NULL) 
+                {
             	size_t nfiles = PyList_Size(pValue);
             	out = new std::vector<std::string>();
-            	for (size_t i = 0; i < nfiles; i++) {
+            	for (size_t i = 0; i < nfiles; i++) 
+                    {
             		char buffer[256];
             		char* pystr = PyString_AsString(PyList_GetItem(pValue, i));
-            		if (pystr) {
+            		if (pystr) 
+                        {
 	            		strcpy(buffer, pystr);
 	            		out->push_back(std::string(buffer));
-            		}
-            	}
+            		  }
+            	   }
                 Py_DECREF(pValue);
-            } else {
+                } 
+            else 
+                {
                 Py_DECREF(pFunc);
                 Py_DECREF(pModule);
                 PyErr_Print();
                 fprintf(stderr,"Call failed\n");
-            }
-        } else {
+                }
+            } 
+        else 
+            {
             if (PyErr_Occurred())
                 PyErr_Print();
             fprintf(stderr, "Cannot find function \"%s\"\n", readDirFunc);
-        }
+            }
         Py_XDECREF(pFunc);
         Py_DECREF(pModule);
-    } else {
+        } 
+    else 
+        {
         PyErr_Print();
         fprintf(stderr, "Failed to load \"%s\"\n", readDirPython);
-    }
+        }
     Py_Finalize();
 
     return out;
 }
 
-static void* testIn(void* not_used) {
-	std::vector<std::string>* files = readDirectory(directory);
-	if (NULL == files) {
-	} else {
-		std::ifstream file;
-		double d;
-		for (std::vector<std::string>::iterator it = files->begin(); it != files->end(); it++) {
-			file.open("tests/"+*it, std::ifstream::in);
-			if (file.good()) {
-				while (!file.eof()) {
-					file >> d;
-					buffer.add(d);
-                    sleep_mu.lock();
-                    std::this_thread::sleep_for(std::chrono::milliseconds(50));
-                    sleep_mu.unlock();
-				}
-				buffer.add(-1);
-                sleep_mu.lock();
-                std::this_thread::sleep_for(std::chrono::milliseconds(50));
-                sleep_mu.unlock();
-			}
-			file.close();
-		}
-	}
-	delete files;
-	return 0;
-}
+template <typename T>
+void bufferPopulate(std::string directory, 
+                    std::vector<std::string>* fileset, 
+                    PCBuffer<T>& buff,
+                    T delimiter)
+    {
+    if (NULL == fileset) {} 
+    else 
+        {
+        std::ifstream file;
+        T data;
+        for (std::vector<std::string>::iterator it = fileset->begin(); 
+            it != fileset->end();
+            it++) 
+            {
+            file.open(directory+*it, std::ifstream::in);
+            if (file.good()) 
+                {
+                while (!file.eof()) 
+                    {
+                    file >> data;
+                    buff.add(data);
+                    }
+                buff.add(delimiter);
+                }
+            file.close();
+            }
+        }
+    }
 
-void readdir() {
-	static pthread_t thread;
-	int i;
-	int rc = pthread_create(&thread, NULL, testIn, NULL);
-	if (rc) {
-        std::cout << "Error:unable to create thread," << rc << std::endl;
-        exit(-1);
-	}
-}
-
-double getTestData() {
-    double data = buffer.remove();
+static void* testNumIn(void* not_used) 
+    {
     sleep_mu.lock();
-    std::this_thread::sleep_for(std::chrono::milliseconds(50));
+    std::vector<std::string>* nfiles = readDirectory(numdirectory.c_str());
     sleep_mu.unlock();
+	bufferPopulate<double>(numdirectory, nfiles, numbuffer, -1);
+    delete nfiles;
+	return 0;
+    }
+
+static void* testStrIn(void* not_used) 
+    {
+    sleep_mu.lock();
+    std::vector<std::string>* sfiles = readDirectory(strdirectory.c_str());
+    sleep_mu.unlock();
+    bufferPopulate<std::string>(strdirectory, sfiles, strbuffer, "");
+    delete sfiles;
+    return 0;
+    }
+
+void readdir(pthread_t& thread, pthread_t& thread2) 
+    {
+	int i;
+	int rc = pthread_create(&thread, NULL, testNumIn, NULL);
+	if (rc) 
+        {
+        std::cout << "Error:unable to create number thread," << rc << std::endl;
+        exit(-1);
+        }
+
+    rc = pthread_create(&thread2, NULL, testStrIn, NULL);
+    if (rc) 
+        {
+        std::cout << "Error:unable to create string thread," << rc << std::endl;
+        exit(-1);
+        }
+    }
+
+std::string getStrData() 
+    {
+    std::string data = strbuffer.remove();
     return data;
-}
+    }
+
+double getNumData() 
+    {
+    double data = numbuffer.remove();
+    return data;
+    }

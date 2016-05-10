@@ -1,6 +1,7 @@
 //
 //  listnode.hpp
 //  dataContainer
+//
 //  description: singly linked node
 //
 //  Created by Mingkai Chen on 2014-06-12.
@@ -13,22 +14,25 @@
 
 #include "gnode.hpp"
 
-template <class T>
-class listnode : public gnode<T>
+namespace dcontain
     {
-    protected:
-        listnode<T> (void) {next = NULL;}
-    public:
-        listnode<T>* next;
-        
-        listnode (T data);
-        listnode (T data, listnode<T>* next);
-        virtual ~listnode (void) {}
-        
-        void cascadeDelete (void);
-        virtual listnode<T>* cascadeCopy (void);
-    };
+    template <class T>
+    class listnode : public gnode<T>
+        {
+        protected:
+            listnode<T> (void) {next = NULL;}
+        public:
+            listnode<T>* next;
+            
+            listnode (T data);
+            listnode (T data, listnode<T>* next);
+            virtual ~listnode (void) {}
+            
+            void cascadeDelete (void);
+            virtual listnode<T>* cascadeCopy (void);
+        };
 
-#include "listnode.cpp"
+    #include "listnode.cpp"
+    }
 
 #endif /* __LIST_NODE__H */

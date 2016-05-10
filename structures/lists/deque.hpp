@@ -14,65 +14,73 @@
 
 #include "queue.hpp"
 
-// Double ended queue (throw error handle behavior with remove on empty)
-template <class T>
-class deque : public queue<T>
+namespace list
     {
-    public:
-    	// constructs NULL head and tail
-    	// @remark default constructor
-        deque (void) {}
+    // Double ended queue (throw error handle behavior with remove on empty)
+    template <class T>
+    class deque : public queue<T>
+        {
+        public:
+        	// constructs NULL head and tail
+        	// @remark default constructor
+            deque (void) {}
 
-    	// destroys self content, then copy src content to self
-    	// @remark copy constructor
-        deque (const deque& src);
+        	// destroys self content, then copy src content to self
+        	// @remark copy constructor
+            deque (const deque& src);
 
-    	// destructor
-    	// @remark destructor
-        virtual ~deque (void) {}
+        	// destructor
+        	// @remark destructor
+            virtual ~deque (void) {}
 
-    	// copy assignment operator
-    	// @param[in]	src		reference to deque object to copy from
-    	// @return		reference to this after copy assignment
-        deque<T>& operator = (const deque<T>& src);
+        	// copy assignment operator
+        	// @param[in]	src		reference to deque object to copy from
+        	// @return		reference to this after copy assignment
+            deque<T>& operator = (const deque<T>& src);
 
-    	// add data to back (tail) of list
-    	// @param[in]	data	T type data to add
-    	// @return		void
-        void push_back (T data);
+        	// add data to back (tail) of list
+        	// @param[in]	data	T type data to add
+        	// @return		void
+            void push_back (T data);
 
-    	// remove data from front (head) of list
-    	// @param[]		void
-    	// @return		T type data removed
-        T pop_front (void);
+        	// remove data from front (head) of list
+        	// @param[]		void
+        	// @return		T type data removed
+            T pop_front (void);
 
-        // --- INHERITED FROM QUEUE --- //
-        // add data to front (head) of list
-    	// @param[in]	data	T type data to add
-    	// @return		void
-    	// void push_front (T data);
+            // --- INHERITED FROM QUEUE --- //
+            // add data to front (head) of list
+        	// @param[in]	data	T type data to add
+        	// @return		void
+        	// void push_front (T data);
 
-        // remove data from back (tail) of list
-    	// @param[in]	void
-        // @return      T type data removed
-        // T pop_back (void);
+            // remove data from back (tail) of list
+        	// @param[in]	void
+            // @return      T type data removed
+            // T pop_back (void);
 
-        // accesses data from front (head) of list
-    	// @param[]		void
-    	// @return		T type data accessed
-        // T peek_front (void) const;
+            // accesses data from front (head) of list
+        	// @param[]		void
+        	// @return		T type data accessed
+            // T peek_front (void) const;
 
-        // accesses data from back (tail) of list
-    	// @param[]		void
-    	// @return		T type data accessed
-        // T peek_back (void) const;
+            // accesses data from back (tail) of list
+        	// @param[]		void
+        	// @return		T type data accessed
+            // T peek_back (void) const;
 
-        // determines if the list is empty
-    	// @param[]		void
-    	// @return		true if empty, false otherwise
-        // bool isEmpty (void) const;
-    };
+            // determines if the list is empty
+        	// @param[]		void
+        	// @return		true if empty, false otherwise
+            // bool isEmpty (void) const;
 
-#include "deque.cpp"
+            // wipes all data in queue
+            // @param[]     void
+            // @return      void
+            // void clear (void);
+        };
+
+    #include "deque.cpp"
+    }
 
 #endif /* __DEQUE__H */

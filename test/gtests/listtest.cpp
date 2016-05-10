@@ -1,11 +1,11 @@
-#include "../structures/header/lists.hpp"
+#include "../../structures/header/lists.hpp"
 #include <algorithm>
 
 // ------------ CHECK INITIAL STATES ----------------- //
 TEST(INIT, deque)
 	{
-	deque<size_t> 	inst;
-	deque<size_t>* 	ptr = new deque<size_t>();
+	list::deque<size_t> 	inst;
+	list::deque<size_t>* 	ptr = new list::deque<size_t>();
 	EXPECT_TRUE(inst.isEmpty());
 	EXPECT_TRUE(ptr->isEmpty());
 	delete ptr;
@@ -13,8 +13,8 @@ TEST(INIT, deque)
 
 TEST(INIT, dynamicarr)
 	{
-	dynamicarr<size_t> 		inst;
-	dynamicarr<size_t>* 	ptr = new dynamicarr<size_t>();
+	list::dynamicarr<size_t> 	inst;
+	list::dynamicarr<size_t>* 	ptr = new list::dynamicarr<size_t>();
 	EXPECT_EQ(0, inst[0]);
 	EXPECT_EQ(0, (*ptr)[0]);
 	delete ptr;
@@ -22,8 +22,8 @@ TEST(INIT, dynamicarr)
 
 TEST(INIT, queue)
 	{
-	queue<size_t> 	inst;
-	queue<size_t>* 	ptr = new queue<size_t>();
+	list::queue<size_t> 	inst;
+	list::queue<size_t>* 	ptr = new list::queue<size_t>();
 	EXPECT_TRUE(inst.isEmpty());
 	EXPECT_TRUE(ptr->isEmpty());
 	delete ptr;
@@ -31,8 +31,8 @@ TEST(INIT, queue)
 
 TEST(INIT, searchlist)
 	{
-	searchlist<size_t> 		inst;
-	searchlist<size_t>* 	ptr = new searchlist<size_t>();
+	list::searchlist<size_t> 	inst;
+	list::searchlist<size_t>* 	ptr = new list::searchlist<size_t>();
 	EXPECT_EQ(0, inst.size());
 	EXPECT_EQ(0, ptr->size());
 	delete ptr;
@@ -40,8 +40,8 @@ TEST(INIT, searchlist)
 
 TEST(INIT, skiplist)
 	{
-	skiplist<size_t> 	inst;
-	skiplist<size_t>* 	ptr = new skiplist<size_t>();
+	list::skiplist<size_t> 	inst;
+	list::skiplist<size_t>* ptr = new list::skiplist<size_t>();
 	EXPECT_TRUE(inst.isEmpty());
 	EXPECT_TRUE(ptr->isEmpty());
 	delete ptr;
@@ -49,8 +49,8 @@ TEST(INIT, skiplist)
 
 TEST(INIT, stack)
 	{
-	stack<size_t> 	inst;
-	stack<size_t>* 	ptr = new stack<size_t>();
+	list::stack<size_t> 	inst;
+	list::stack<size_t>* 	ptr = new list::stack<size_t>();
 	EXPECT_TRUE(inst.isEmpty());
 	EXPECT_TRUE(ptr->isEmpty());
 	delete ptr;
@@ -59,15 +59,15 @@ TEST(INIT, stack)
 // ------------ DATA ENTRY ----------------- //
 TEST(DATA_ENTRY, deque)
 	{
-	deque<double> 		back2back;
-	deque<double> 		front2front;
-	deque<double> 		front2back;
-	deque<double> 		back2front;
+	list::deque<double> 		back2back;
+	list::deque<double> 		front2front;
+	list::deque<double> 		front2back;
+	list::deque<double> 		back2front;
 	std::vector<double> store;
 
-	for (double data = getTestData();
+	for (double data = getNumData();
 		data >= 0;
-		data = getTestData()) 
+		data = getNumData()) 
 		{
 		back2back.push_back(data);
 		front2front.push_front(data);
@@ -113,16 +113,16 @@ TEST(DATA_ENTRY, deque)
 
 TEST(DATA_ENTRY, dynamicarr)
 	{
-	dynamicarr<double>  arr;
-	dynamicarr<bool>	arr2;
+	list::dynamicarr<double>  arr;
+	list::dynamicarr<bool>	arr2;
 	std::vector<double> store;
 	bool verifier[101] = {false};
 	size_t index = 0;
 	size_t testindex;
 
-	for (double data = getTestData();
+	for (double data = getNumData();
 		data >= 0;
-		data = getTestData()) 
+		data = getNumData()) 
 		{
 		arr[index++] = data;
 		testindex = ((size_t) data) % 101;
@@ -148,12 +148,12 @@ TEST(DATA_ENTRY, dynamicarr)
 
 TEST(DATA_ENTRY, queue)
 	{
-	queue<double> 		q;
+	list::queue<double> 		q;
 	std::vector<double> store;
 
-	for (double data = getTestData();
+	for (double data = getNumData();
 		data >= 0;
-		data = getTestData()) 
+		data = getNumData()) 
 		{
 		q.push_front(data);
 		store.push_back(data);
@@ -172,13 +172,13 @@ TEST(DATA_ENTRY, queue)
 
 TEST(DATA_ENTRY, searchlist)
 	{
-	searchlist<double> 	list;
+	list::searchlist<double> 	list;
 	std::vector<double> store;
 	size_t index = 0;
 
-	for (double data = getTestData();
+	for (double data = getNumData();
 		data >= 0;
-		data = getTestData()) 
+		data = getNumData()) 
 		{
 		list.nInsert(data, index++);
 		store.push_back(data);
@@ -202,12 +202,12 @@ TEST(DATA_ENTRY, searchlist)
 
 TEST(DATA_ENTRY, skiplist)
 	{
-	skiplist<double> 	list;
+	list::skiplist<double> 	list;
 	std::vector<double> store;
 
-	for (double data = getTestData();
+	for (double data = getNumData();
 		data >= 0;
-		data = getTestData()) 
+		data = getNumData()) 
 		{
 		if (true == list.insert(data))
 			{
@@ -241,12 +241,12 @@ TEST(DATA_ENTRY, skiplist)
 
 TEST(DATA_ENTRY, stack)
 	{
-	stack<double> 		s;
+	list::stack<double> 		s;
 	std::vector<double> store;
 
-	for (double data = getTestData();
+	for (double data = getNumData();
 		data >= 0;
-		data = getTestData()) 
+		data = getNumData()) 
 		{
 		s.push(data);
 		store.push_back(data);
@@ -266,30 +266,30 @@ TEST(DATA_ENTRY, stack)
 // ------------ COPY STRUCTURES ----------------- //
 TEST(COPY, deque)
 	{
-	deque<double> 		empty;
-	deque<double> 		emptycopy(empty);
-	deque<double> 		emptycopyassign;
+	list::deque<double> 		empty;
+	list::deque<double> 		emptycopy(empty);
+	list::deque<double> 		emptycopyassign;
 	emptycopyassign = empty;
 
 	ASSERT_TRUE(empty.isEmpty());
 	EXPECT_TRUE(emptycopy.isEmpty());
 	EXPECT_TRUE(emptycopyassign.isEmpty());
 
-	deque<double> 		orig;
-	deque<double> 		copyassign;
-	deque<double> 		recopyassign;
+	list::deque<double> 		orig;
+	list::deque<double> 		copyassign;
+	list::deque<double> 		recopyassign;
 	std::vector<double> store;
 
-	for (double data = getTestData();
+	for (double data = getNumData();
 		data >= 0;
-		data = getTestData()) 
+		data = getNumData()) 
 		{
 		orig.push_back(data);
 		recopyassign.push_front(data); // different data order
 		store.push_back(data);
 		}
 
-	deque<double> 		copy(orig);
+	list::deque<double> 		copy(orig);
 	copyassign = orig;
 	recopyassign = orig;
 
@@ -315,24 +315,24 @@ TEST(COPY, deque)
 
 TEST(COPY, dynamicarr)
 	{
-	dynamicarr<double>  empty;
-	dynamicarr<double>  emptycopy(empty);
-	dynamicarr<double>  emptycopyassign;
+	list::dynamicarr<double>  empty;
+	list::dynamicarr<double>  emptycopy(empty);
+	list::dynamicarr<double>  emptycopyassign;
 	emptycopyassign = empty;
 
 	ASSERT_EQ(empty[0], 0);
 	EXPECT_EQ(emptycopy[0], 0);
 	EXPECT_EQ(emptycopyassign[0], 0);
 
-	dynamicarr<double> 		orig;
-	dynamicarr<double> 		copyassign;
-	dynamicarr<double> 		recopyassign;
+	list::dynamicarr<double> 		orig;
+	list::dynamicarr<double> 		copyassign;
+	list::dynamicarr<double> 		recopyassign;
 	std::vector<double> store;
 	size_t index = 0;
 
-	for (double data = getTestData();
+	for (double data = getNumData();
 		data >= 0;
-		data = getTestData()) 
+		data = getNumData()) 
 		{
 		orig[index] = data;
 		recopyassign[index] = data;
@@ -340,7 +340,7 @@ TEST(COPY, dynamicarr)
 		index++;
 		}
 
-	dynamicarr<double> 		copy(orig);
+	list::dynamicarr<double> 		copy(orig);
 	copyassign = orig;
 	recopyassign = orig;
 
@@ -359,30 +359,30 @@ TEST(COPY, dynamicarr)
 
 TEST(COPY, queue)
 	{
-	queue<double>  empty;
-	queue<double>  emptycopy(empty);
-	queue<double>  emptycopyassign;
+	list::queue<double>  empty;
+	list::queue<double>  emptycopy(empty);
+	list::queue<double>  emptycopyassign;
 	emptycopyassign = empty;
 
 	ASSERT_TRUE(empty.isEmpty());
 	EXPECT_TRUE(emptycopy.isEmpty());
 	EXPECT_TRUE(emptycopyassign.isEmpty());
 
-	queue<double> 		orig;
-	queue<double> 		copyassign;
-	queue<double> 		recopyassign;
+	list::queue<double> 		orig;
+	list::queue<double> 		copyassign;
+	list::queue<double> 		recopyassign;
 	std::vector<double> store;
 
-	for (double data = getTestData();
+	for (double data = getNumData();
 		data >= 0;
-		data = getTestData()) 
+		data = getNumData()) 
 		{
 		orig.push_front(data);
 		recopyassign.push_front(data);
 		store.push_back(data);
 		}
 
-	queue<double> 		copy(orig);
+	list::queue<double> 		copy(orig);
 	copyassign = orig;
 	recopyassign = orig;
 	for (std::vector<double>::iterator it = store.begin(); 
@@ -408,24 +408,24 @@ TEST(COPY, queue)
 
 TEST(COPY, searchlist)
 	{
-	searchlist<double>  empty;
-	searchlist<double>  emptycopy(empty);
-	searchlist<double>  emptycopyassign;
+	list::searchlist<double>  empty;
+	list::searchlist<double>  emptycopy(empty);
+	list::searchlist<double>  emptycopyassign;
 	emptycopyassign = empty;
 
 	ASSERT_EQ(empty.size(), 0);
 	EXPECT_EQ(emptycopy.size(), 0);
 	EXPECT_EQ(emptycopyassign.size(), 0);
 
-	searchlist<double> 	orig;
-	searchlist<double> 		copyassign;
-	searchlist<double> 		recopyassign;
+	list::searchlist<double> 	orig;
+	list::searchlist<double> 		copyassign;
+	list::searchlist<double> 		recopyassign;
 	std::vector<double> store;
 	size_t index = 0;
 
-	for (double data = getTestData();
+	for (double data = getNumData();
 		data >= 0;
-		data = getTestData()) 
+		data = getNumData()) 
 		{
 		orig.nInsert(data, index);
 		recopyassign.nInsert(data, index);
@@ -433,7 +433,7 @@ TEST(COPY, searchlist)
 		index++;
 		}
 
-	searchlist<double> 		copy(orig);
+	list::searchlist<double> 		copy(orig);
 	copyassign = orig;
 	recopyassign = orig;
 
@@ -455,23 +455,23 @@ TEST(COPY, searchlist)
 
 TEST(COPY, skiplist)
 	{
-	skiplist<double>  empty;
-	skiplist<double>  emptycopy(empty);
-	skiplist<double>  emptycopyassign;
+	list::skiplist<double>  empty;
+	list::skiplist<double>  emptycopy(empty);
+	list::skiplist<double>  emptycopyassign;
 	emptycopyassign = empty;
 
 	ASSERT_TRUE(empty.isEmpty());
 	EXPECT_TRUE(emptycopy.isEmpty());
 	EXPECT_TRUE(emptycopyassign.isEmpty());
 
-	skiplist<double> 	orig;
-	skiplist<double> 	copyassign;
-	skiplist<double> 	recopyassign;
+	list::skiplist<double> 	orig;
+	list::skiplist<double> 	copyassign;
+	list::skiplist<double> 	recopyassign;
 	std::vector<double> store;
 
-	for (double data = getTestData();
+	for (double data = getNumData();
 		data >= 0;
-		data = getTestData()) 
+		data = getNumData()) 
 		{
 		if (true == orig.insert(data))
 			{
@@ -480,7 +480,7 @@ TEST(COPY, skiplist)
 			}
 		}
 
-	skiplist<double> 		copy(orig);
+	list::skiplist<double> 		copy(orig);
 	copyassign = orig;
 	recopyassign = orig;
 
@@ -501,30 +501,30 @@ TEST(COPY, skiplist)
 
 TEST(COPY, stack)
 	{
-	stack<double>  empty;
-	stack<double>  emptycopy(empty);
-	stack<double>  emptycopyassign;
+	list::stack<double>  empty;
+	list::stack<double>  emptycopy(empty);
+	list::stack<double>  emptycopyassign;
 	emptycopyassign = empty;
 
 	ASSERT_TRUE(empty.isEmpty());
 	EXPECT_TRUE(emptycopy.isEmpty());
 	EXPECT_TRUE(emptycopyassign.isEmpty());
 
-	stack<double> 	orig;
-	stack<double> 	copyassign;
-	stack<double> 	recopyassign;
+	list::stack<double> 	orig;
+	list::stack<double> 	copyassign;
+	list::stack<double> 	recopyassign;
 	std::vector<double> store;
 
-	for (double data = getTestData();
+	for (double data = getNumData();
 		data >= 0;
-		data = getTestData()) 
+		data = getNumData()) 
 		{
 		orig.push(data);
 		recopyassign.push(data);
 		store.push_back(data);
 		}
 
-	stack<double> 		copy(orig);
+	list::stack<double> 		copy(orig);
 	copyassign = orig;
 	recopyassign = orig;
 	std::reverse(store.begin(), store.end());
@@ -553,14 +553,14 @@ TEST(COPY, stack)
 // ------------ SEARCH FUNCTIONS ----------------- //
 TEST(SEARCH, dynamicarr)
 	{
-	dynamicarr<double> 	arr;
+	list::dynamicarr<double> 	arr;
 	std::vector<double> store;
 	std::vector<double> uniques;
 	size_t index = 0;
 
-	for (double data = getTestData();
+	for (double data = getNumData();
 		data >= 0;
-		data = getTestData()) 
+		data = getNumData()) 
 		{
 		arr[index] = data;
 		store.push_back(data);
@@ -583,21 +583,21 @@ TEST(SEARCH, dynamicarr)
 
 TEST(SEARCH, searchlist)
 	{
-	searchlist<double> 	list;
+	list::searchlist<double> 	list;
 	std::vector<double> store;
 	std::vector<double> antistore;
 	std::vector<double> uniques;
 	size_t index = 0;
 
-	for (double data = getTestData();
-		data >= 0; data = getTestData())
+	for (double data = getNumData();
+		data >= 0; data = getNumData())
 		{
 		antistore.push_back(data);
 		}
 
-	for (double data = getTestData();
+	for (double data = getNumData();
 		data >= 0;
-		data = getTestData()) 
+		data = getNumData()) 
 		{
 		std::vector<double>::iterator it = find(antistore.begin(), antistore.end(), data);
 		if (it != antistore.end())
@@ -640,19 +640,19 @@ TEST(SEARCH, searchlist)
 
 TEST(SEARCH, skiplist)
 	{
-	skiplist<double> 	list;
+	list::skiplist<double> 	list;
 	std::vector<double> antistore;
 	std::vector<double> store;
 
-	for (double data = getTestData();
-		data >= 0; data = getTestData())
+	for (double data = getNumData();
+		data >= 0; data = getNumData())
 		{
 		antistore.push_back(data);
 		}
 
-	for (double data = getTestData();
+	for (double data = getNumData();
 		data >= 0;
-		data = getTestData()) 
+		data = getNumData()) 
 		{
 		std::vector<double>::iterator it = find(antistore.begin(), antistore.end(), data);
 		if (it != antistore.end())

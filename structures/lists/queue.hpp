@@ -14,56 +14,64 @@
 
 #include "../dcontainers/binode.hpp"
 
-template <class T>
-class queue
+namespace list
     {
-    protected:
-        binode<T>* head;
-        binode<T>* tail;
-    public:
-        // constructs NULL head and tail
-        // @remark default constructor
-        queue (void);
+    template <class T>
+    class queue
+        {
+        protected:
+            dcontain::binode<T>* head;
+            dcontain::binode<T>* tail;
+        public:
+            // constructs NULL head and tail
+            // @remark default constructor
+            queue (void);
 
-        // destroys self content, then copy src content to self
-        // @remark copy constructor
-        queue (const queue& src);
+            // destroys self content, then copy src content to self
+            // @remark copy constructor
+            queue (const queue& src);
 
-        // destructor
-        // @remark destructor
-        virtual ~queue (void);
+            // destructor
+            // @remark destructor
+            virtual ~queue (void);
 
-        // copy assignment operator
-        // @param[in]   src     reference to deque object to copy from
-        // @return      reference to this after copy assignment
-        queue<T>& operator = (const queue<T>& src);
-        
-        // add data to front (head) of list
-        // @param[in]   data    T type data to add
-        // @return      void
-        void push_front (T data);
+            // copy assignment operator
+            // @param[in]   src     reference to deque object to copy from
+            // @return      reference to this after copy assignment
+            queue<T>& operator = (const queue<T>& src);
+            
+            // add data to front (head) of list
+            // @param[in]   data    T type data to add
+            // @return      void
+            void push_front (T data);
 
-        // remove data from back (tail) of list
-        // @param[in]   void
-        // @return      T type data removed
-        T pop_back (void);
+            // remove data from back (tail) of list
+            // @param[in]   void
+            // @return      T type data removed
+            T pop_back (void);
 
-        // accesses data from front (head) of list
-        // @param[]     void
-        // @return      T type data accessed
-        T peek_front (void) const;
+            // accesses data from front (head) of list
+            // @param[]     void
+            // @return      T type data accessed
+            T peek_front (void) const;
 
-        // accesses data from back (tail) of list
-        // @param[]     void
-        // @return      T type data accessed
-        T peek_back (void) const;
+            // accesses data from back (tail) of list
+            // @param[]     void
+            // @return      T type data accessed
+            T peek_back (void) const;
 
-        // determines if the list is empty
-        // @param[]     void
-        // @return      true if empty, false otherwise
-        bool isEmpty (void) const;
-    };
+            // determines if the list is empty
+            // @param[]     void
+            // @return      true if empty, false otherwise
+            bool isEmpty (void) const;
 
-#include "queue.cpp"
+            // wipes all data in queue
+            // @param[]     void
+            // @return      void
+            void clear (void);
+        };
+
+    #include "queue.cpp"
+    }
 
 #endif /* __QUEUE__H */

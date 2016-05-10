@@ -1,14 +1,14 @@
-#include <iostream>
 #include <thread>
 #include <mutex>
 #include <chrono>
 #include <condition_variable>
 #include "../structures/header/lists.hpp"
 
+template <typename T>
 class PCBuffer
     {
     public:
-        void add(double d) {
+        void add(T d) {
             while (true) {
                 std::unique_lock<std::mutex> locker(mu);
                 buffer_.push_front(d);
@@ -17,13 +17,13 @@ class PCBuffer
                 return;
             }
         }
-        double remove() {
+        T remove() {
             while (true) {
                 std::unique_lock<std::mutex> locker(mu);
                 cond.wait(locker, [this](){
-                    return false == buffer_.isEmpty();
+                    return false == this->buffer_.isEmpty();
                 });
-                double back = buffer_.pop_back();
+                T back = buffer_.pop_back();
                 locker.unlock();
                 cond.notify_all();
                 return back;
@@ -31,10 +31,8 @@ class PCBuffer
         }
         PCBuffer() {}
     private:
-       // Add them as member variables here
         std::mutex mu;
         std::condition_variable cond;
 
-       // Your normal variables here
-        queue<double> buffer_;
+        list::queue<T> buffer_;
     };

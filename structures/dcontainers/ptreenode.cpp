@@ -2,6 +2,8 @@
 //  ptreenode.cpp
 //  Tree
 //
+//  description: tree node with randomly generated priority value
+//
 //  Created by Mingkai Chen on 2016-01-18.
 //  Copyright © 2016 Mingkai Chen. All rights reserved.
 //

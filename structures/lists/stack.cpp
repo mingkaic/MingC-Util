@@ -38,10 +38,7 @@ stack<T>::stack (const stack& src) : head(NULL)
 template <class T>
 stack<T>::~stack (void)
     {
-    if (NULL != head)
-        {
-        head->cascadeDelete();
-        }
+    clear();
     }
 
 // copy assignment operator
@@ -54,10 +51,7 @@ stack<T>& stack<T>::operator = (const stack<T>& src)
     // prevent self assignment
     if (&src != this)
         {
-        if (NULL != head)
-            {
-            head->cascadeDelete();
-            }
+        clear();
         
         if (NULL != src.head)
             {
@@ -75,7 +69,7 @@ stack<T>& stack<T>::operator = (const stack<T>& src)
 template <class T>
 void stack<T>::push (T data)
     {
-    head = new listnode<T>(data, head);
+    head = new dcontain::listnode<T>(data, head);
     }
 
 // remove data from top of stack
@@ -93,7 +87,7 @@ T stack<T>::pop (void)
     
     T data = head->getData();
     
-    listnode<T>* buffer = head;
+    dcontain::listnode<T>* buffer = head;
     head = head->next;
     delete buffer;
     
@@ -123,6 +117,20 @@ template <class T>
 bool stack<T>::isEmpty (void) const
     {
     return NULL == head;
+    }
+
+// wipes all data in stack
+// @param[]     void
+// @return      void
+
+template <class T>
+void stack<T>::clear (void)
+    {
+    if (NULL != head)
+        {
+        head->cascadeDelete();
+        }
+    head = NULL;
     }
 
 #endif /* __STACK__H */

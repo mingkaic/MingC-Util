@@ -28,6 +28,7 @@ searchlist<T>::searchlist (const searchlist& src) : deque<T>(src)
 template <class T>
 searchlist<T>& searchlist<T>::operator = (const searchlist<T>& src)
     {
+    comparator<T>::operator = (src);
     deque<T>::operator = (src);
     return *this;
     }
@@ -40,9 +41,9 @@ template <class T>
 signed searchlist<T>::search (T elem)
     {
     size_t index = 0;
-    binode<T>* buffer = this->head;
-    while (NULL != buffer && false == this->C.equals(elem, buffer->getData()))
-        { 
+    dcontain::binode<T>* buffer = this->head;
+    while (NULL != buffer && false == this->equals(elem, buffer->getData()))
+        {
         buffer = buffer->next;
         index++;
         }
@@ -56,14 +57,14 @@ signed searchlist<T>::search (T elem)
 template <class T>
 void searchlist<T>::nInsert (T elem, size_t N)
     {
-    binode<T>* buffer = this->head;
+    dcontain::binode<T>* buffer = this->head;
     for (size_t i = 0; i < N && NULL != buffer; i++)
         {
         buffer = buffer->next;
         }
     if (NULL == buffer) 
         {
-        this->tail = new binode<T>(this->tail, elem, NULL);
+        this->tail = new dcontain::binode<T>(this->tail, elem, NULL);
         if (NULL != this->tail->prev)
             {
             this->tail->prev->next = this->tail;
@@ -71,7 +72,7 @@ void searchlist<T>::nInsert (T elem, size_t N)
         }
     else
         {
-        binode<T>* holder = new binode<T>(buffer->prev, elem, buffer);
+        dcontain::binode<T>* holder = new dcontain::binode<T>(buffer->prev, elem, buffer);
         buffer->prev->next = holder;
         buffer->prev = holder;
         }
@@ -97,7 +98,7 @@ T searchlist<T>::nRemove (size_t N)
         throw std::runtime_error("removing from empty list");
         }
 
-    binode<T>* buffer = this->head;
+    dcontain::binode<T>* buffer = this->head;
     for (size_t i = 0; i < N && NULL != buffer->next; i++)
         {
         buffer = buffer->next;
@@ -140,7 +141,7 @@ T searchlist<T>::nPeek (size_t N) const
         {
         throw std::runtime_error("peeking in empty list");
         }
-    binode<T>* buffer = this->head;
+    dcontain::binode<T>* buffer = this->head;
     for (size_t incr = 0; incr < N && NULL != buffer; incr++)
         {
         buffer = buffer->next;
@@ -167,7 +168,7 @@ T searchlist<T>::nReplace (T elem, size_t N)
         throw std::runtime_error("removing from empty list");
         }
 
-    binode<T>* buffer = this->head;
+    dcontain::binode<T>* buffer = this->head;
     for (size_t i = 0; i < N && NULL != buffer->next; i++)
         {
         buffer = buffer->next;
@@ -177,7 +178,7 @@ T searchlist<T>::nReplace (T elem, size_t N)
         throw std::out_of_range("index greater than size of list");
         }
 
-    binode<T>* holder = new binode<T>(buffer->prev, elem, buffer->next);
+    dcontain::binode<T>* holder = new dcontain::binode<T>(buffer->prev, elem, buffer->next);
     if (this->head == buffer) 
         {
         this->head = holder;
@@ -208,7 +209,7 @@ template <class T>
 size_t searchlist<T>::size (void) const
     {
     size_t incr = 0;
-    for (binode<T>* buffer = this->head; NULL != buffer; buffer = buffer->next)
+    for (dcontain::binode<T>* buffer = this->head; NULL != buffer; buffer = buffer->next)
         {
         incr++;
         }

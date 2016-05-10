@@ -2,6 +2,8 @@
 //  treenode.hpp
 //  Tree
 //
+//  description: tree node
+//
 //  Created by Mingkai Chen on 2016-01-18.
 //  Copyright © 2016 Mingkai Chen. All rights reserved.
 //
@@ -12,24 +14,27 @@
 
 #include "gnode.hpp"
 
-template <class T>
-class treenode : public gnode<T>
+namespace dcontain
     {
-    protected:
-        treenode (void) {left = right = NULL;}
-    public:
-        treenode<T>* left;
-        treenode<T>* right;
-        
-        treenode (T data);
-        virtual ~treenode (void) {}
-        
-        void cascadeDelete (void);
-        virtual treenode<T>* cascadeCopy (void);
+    template <class T>
+    class treenode : public gnode<T>
+        {
+        protected:
+            treenode (void) {left = right = NULL;}
+        public:
+            treenode<T>* left;
+            treenode<T>* right;
+            
+            treenode (T data);
+            virtual ~treenode (void) {}
+            
+            void cascadeDelete (void);
+            virtual treenode<T>* cascadeCopy (void);
 
-        void injectData (T data) {this->dataInit(data);}
-    };
+            void injectData (T data) {this->dataInit(data);}
+        };
 
-#include "treenode.cpp"
+    #include "treenode.cpp"
+    }
 
 #endif /* __TREE_NODE__H */

@@ -190,6 +190,7 @@ skiplist<T>::~skiplist (void)
 template <class T>
 skiplist<T>& skiplist<T>::operator = (const skiplist<T>& src)
 	{
+    comparator<T>::operator = (src);
 	if (this != &src)
 		{
 		if (NULL != head)
@@ -212,11 +213,11 @@ template <class T>
 bool skiplist<T>::insert (T data)
 	{
 	bool unique = true;
-	if (NULL == head || 0 < this->C.compare(data, head->getData()))
+	if (NULL == head || 0 < this->compare(data, head->getData()))
 		{
 		head = new skipnode<T>(data, head);
 		}
-	else if (this->C.equals(data, head->getData()))
+	else if (this->equals(data, head->getData()))
 		{
 		unique = false;
 		}
@@ -251,15 +252,15 @@ bool skiplist<T>::insert (T data)
 			// if height is not 0 and next is valid, back track, lower, then try again
 			index = curheight - 1;
 			while (index > 0 && 
-				(NULL == buffer->nexts[index] || 0 < this->C.compare(data, buffer->nexts[index]->getData())))
+				(NULL == buffer->nexts[index] || 0 < this->compare(data, buffer->nexts[index]->getData())))
 				{
 				index--;
 				}
 			next = buffer->nexts[index];
 			}
-		while (NULL != next && 0 >= this->C.compare(data, next->getData()));
+		while (NULL != next && 0 >= this->compare(data, next->getData()));
 
-		if (this->C.equals(data, buffer->getData()))
+		if (this->equals(data, buffer->getData()))
 			{
 			unique = false;
 			}
@@ -285,12 +286,12 @@ template <class T>
 bool skiplist<T>::remove (T data)
 	{
 	bool found = true;
-		this->C.compare(data, head->getData());
-	if (NULL == head || 0 < this->C.compare(data, head->getData()))
+		this->compare(data, head->getData());
+	if (NULL == head || 0 < this->compare(data, head->getData()))
 		{
 		found = false;
 		}
-	else if (this->C.equals(data, head->getData()))
+	else if (this->equals(data, head->getData()))
 		{
 		skipnode<T>* buffer = head;
 		head = head->nexts[0];
@@ -303,7 +304,7 @@ bool skiplist<T>::remove (T data)
 		size_t curheight = 0;
 		size_t index = 0;
 		
-		while (NULL != buffer->nexts[0] && 0 >= this->C.compare(data, buffer->nexts[0]->getData()))
+		while (NULL != buffer->nexts[0] && 0 >= this->compare(data, buffer->nexts[0]->getData()))
 			{
 			curheight = buffer->height;
 			// update lasts to ensure last covers the highest skipnode before new data's position
@@ -323,14 +324,14 @@ bool skiplist<T>::remove (T data)
 
 			index = curheight - 1;
 			while (index > 0 && 
-				(NULL == buffer->nexts[index] || 0 <= this->C.compare(data, buffer->nexts[index]->getData())))
+				(NULL == buffer->nexts[index] || 0 <= this->compare(data, buffer->nexts[index]->getData())))
 				{
 				index--;
 				}
 			buffer = buffer->nexts[index];
 			}
 		
-		if (last.size() > 0 && this->C.equals(data, buffer->getData()))
+		if (last.size() > 0 && this->equals(data, buffer->getData()))
 			{
 			curheight = last.size() > buffer->height ? buffer->height : last.size();
 			for (index = 0; index < curheight; index++)
@@ -356,27 +357,27 @@ bool skiplist<T>::search (T data) const
 	{
 	bool found = true;
 	
-	if (NULL == head || 0 < this->C.compare(data, head->getData()))
+	if (NULL == head || 0 < this->compare(data, head->getData()))
 		{
 		found = false;
 		}
-	else if (false == this->C.equals(data, head->getData()))
+	else if (false == this->equals(data, head->getData()))
 		{
 		skipnode<T>* buffer = head;
 		size_t curheight = 0;
 		size_t index;
-		while (NULL != buffer->nexts[0] && 0 >= this->C.compare(data, buffer->nexts[0]->getData()))
+		while (NULL != buffer->nexts[0] && 0 >= this->compare(data, buffer->nexts[0]->getData()))
 			{
 			curheight = buffer->height;
 			index = curheight-1;
 			while (index > 0 && 
-				(NULL == buffer->nexts[index] || 0 < this->C.compare(data, buffer->nexts[index]->getData())))
+				(NULL == buffer->nexts[index] || 0 < this->compare(data, buffer->nexts[index]->getData())))
 				{
 				index--;
 				}
 			buffer = buffer->nexts[index];
 			}
-		if (false == this->C.equals(data, buffer->getData()))
+		if (false == this->equals(data, buffer->getData()))
 			{
 			found = false;
 			}
@@ -429,5 +430,19 @@ size_t skiplist<T>::size (void) const
         }
     return incr;
     }
+
+// wipes all data in list
+// @param[]     void
+// @return      void
+
+template <class T>
+void skiplist<T>::clear (void)
+	{
+	if (NULL != head)
+		{
+		head->cascadeDelete();
+		}
+	head = NULL;
+	}
 
 #endif /* __SKIP_LIST__H */

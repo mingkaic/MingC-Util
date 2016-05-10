@@ -15,56 +15,51 @@
 #include <string>
 #include "../oop/compare.hpp"
 
-template <class T>
-using equality = bool (*)(const T&, const T&);
+namespace list
+    {
+    // dynamically increasing array
+    template <class T>
+    class dynamicarr : public comparator<T>
+        {    
+        private:
+            T* array;
+            size_t allocSize;
 
-template <class T>
-bool genericEquality(const T& o1, const T& o2) {
-    return o1 == o2;
-}
+            // handles the dynamic checking and expansion of the array
+            // @param[in]   expand     expansion rate: next size = cur size * expand
+            // @return      void
+            void dynamicSize (size_t expand = 2); // 
+        public:
+            // allocates an array with default size of 128
+            // @remark default constructor
+            dynamicarr (void);
 
-// dynamically increasing array
-template <class T>
-class dynamicarr : public compManage<T>
-    {    
-    private:
-        T* array;
-        size_t allocSize;
+            // destroys self content, then copy src content to self
+            // @remark copy constructor
+            dynamicarr (const dynamicarr<T>& src);
 
-        // handles the dynamic checking and expansion of the array
-        // @param[in]   expand     expansion rate: next size = cur size * expand
-        // @return      void
-        void dynamicSize (size_t expand = 2); // 
-    public:
-        // allocates an array with default size of 128
-        // @remark default constructor
-        dynamicarr (void);
+            // destructor
+            // @remark destructor
+            virtual ~dynamicarr (void);
 
-        // destroys self content, then copy src content to self
-        // @remark copy constructor
-        dynamicarr (const dynamicarr<T>& src);
+            // copy assignment operator
+            // @param[in]   src     reference to dynamic object to copy from
+            // @return      reference to this after copy assignment
+            dynamicarr<T>& operator = (const dynamicarr<T>& src);
 
-        // destructor
-        // @remark destructor
-        virtual ~dynamicarr (void);
+            // overloaded bracket reference operator
+            // @param[in]   index     integer index of the accessing element in arr
+            // @return      reference to data at index
+            T& operator [] (size_t index);
 
-        // copy assignment operator
-        // @param[in]   src     reference to dynamic object to copy from
-        // @return      reference to this after copy assignment
-        dynamicarr<T>& operator = (const dynamicarr<T>& src);
-
-        // overloaded bracket reference operator
-        // @param[in]   index     integer index of the accessing element in arr
-        // @return      reference to data at index
-        T& operator [] (size_t index);
-
-        // finds the index of the first instance of element
-        // determines equality using input function following signature: bool (*)(const T&, const T&);
-        // @param[in]   elem     element to search for
-        // @return      index of the elem if found, -1 otherwise
-        signed indexOf (T elem) const;
-    };
-    
-#include "dynamicarr.cpp"
+            // finds the index of the first instance of element
+            // determines equality using input function following signature: bool (*)(const T&, const T&);
+            // @param[in]   elem     element to search for
+            // @return      index of the elem if found, -1 otherwise
+            signed indexOf (T elem) const;
+        };
+        
+    #include "dynamicarr.cpp"
+    }
 
 #endif /* __DYNAMIC_ARR__H */

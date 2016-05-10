@@ -1,6 +1,7 @@
 //
 //  binode.cpp
 //  dataContainer
+//
 //  description: a doubly linked node
 //
 //  Created by Mingkai Chen on 2014-06-12.

@@ -64,6 +64,7 @@ dynamicarr<T>::~dynamicarr (void)
 template <class T>
 dynamicarr<T>& dynamicarr<T>::operator = (const dynamicarr<T>& src)
     {
+    comparator<T>::operator = (src);
     if (&src != this)
         {
         delete[] array;
@@ -99,7 +100,7 @@ template <class T>
 signed dynamicarr<T>::indexOf (T elem) const
     {
     signed index = 0;
-    while (index < allocSize && false == this->C.equals(array[index], elem))
+    while (index < allocSize && false == this->equals(array[index], elem))
         {
         index++;
         }

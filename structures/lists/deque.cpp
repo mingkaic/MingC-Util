@@ -39,11 +39,11 @@ template <class T>
 void deque<T>::push_back (T data) {
     if (NULL == this->tail)
         {
-        this->head = this->tail = new binode<T>(this->tail, data, NULL);
+        this->head = this->tail = new dcontain::binode<T>(this->tail, data, NULL);
         }
     else
         {
-        this->tail->next = new binode<T>(this->tail, data, NULL);
+        this->tail->next = new dcontain::binode<T>(this->tail, data, NULL);
         this->tail = this->tail->next;
         }
 }
@@ -60,7 +60,7 @@ T deque<T>::pop_front (void) {
         }
     
     T data = this->head->getData();
-    binode<T>* buffer = this->head;
+    dcontain::binode<T>* buffer = this->head;
     if (this->tail == this->head)
         {
         this->tail = this->head = NULL;

@@ -35,10 +35,7 @@ queue<T>::queue (const queue& src) : head(NULL), tail(NULL)
 template <class T>
 queue<T>::~queue (void)
     {
-    if (NULL != head)
-        {
-        head->cascadeDelete();
-        }
+    clear();
     }
 
 // copy assignment operator
@@ -50,10 +47,7 @@ queue<T>& queue<T>::operator = (const queue<T>& src)
     // prevent self assignment
     if (&src != this)
         {
-        if (NULL != head)
-            {
-            head->cascadeDelete();
-            }
+        clear();
         
         if (NULL != src.head)
             {
@@ -71,7 +65,7 @@ queue<T>& queue<T>::operator = (const queue<T>& src)
 template <class T>
 void queue<T>::push_front (T data)
     {
-    head = new binode<T>(NULL, data, head);
+    head = new dcontain::binode<T>(NULL, data, head);
     if (NULL == head->next)
         {
         tail = head;
@@ -96,7 +90,7 @@ T queue<T>::pop_back (void)
         }
     
     T data = tail->getData();
-    binode<T>* buffer = tail;
+    dcontain::binode<T>* buffer = tail;
     if (tail == head)
         {
         tail = head = NULL;
@@ -149,6 +143,20 @@ template <class T>
 bool queue<T>::isEmpty (void) const
     {
     return NULL == head;
+    }
+
+// wipes all data in queue
+// @param[]     void
+// @return      void
+
+template <class T>
+void queue<T>::clear (void)
+    {
+    if (NULL != head)
+        {
+        head->cascadeDelete();
+        }
+    head = tail = NULL;
     }
 
 #endif /* __QUEUE__H */

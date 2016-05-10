@@ -2,7 +2,7 @@
 //  spointer.hpp
 //  memory
 //
-//  description: smart pointer based on std::shared_ptr
+//  description: smart pointer based on std::spointer
 //
 //  Created by Mingkai Chen on 2015-05-10.
 //  Copyright © 2014-2016 Mingkai Chen. All rights reserved.
@@ -257,5 +257,37 @@ class spointer
 			return NULL != ptr && 0 < reference.use_count();
 			}
 	};
+
+	// comparaison operators
+	template<class T, class U> 
+	inline bool operator==(const spointer<T>& l, const spointer<U>& r)
+		{
+	    return (l.get() == r.get());
+		}
+	template<class T, class U> 
+	inline bool operator!=(const spointer<T>& l, const spointer<U>& r)
+		{
+	    return (l.get() != r.get());
+		}
+	template<class T, class U> 
+	inline bool operator<=(const spointer<T>& l, const spointer<U>& r)
+		{
+	    return (l.get() <= r.get());
+		}
+	template<class T, class U> 
+	inline bool operator<(const spointer<T>& l, const spointer<U>& r)
+		{
+	    return (l.get() < r.get());
+		}
+	template<class T, class U> 
+	inline bool operator>=(const spointer<T>& l, const spointer<U>& r)
+		{
+	    return (l.get() >= r.get());
+		}
+	template<class T, class U> 
+	inline bool operator>(const spointer<T>& l, const spointer<U>& r)
+		{
+	    return (l.get() > r.get());
+		}
 
 #endif /*__WICKD_SMAUT__H  */

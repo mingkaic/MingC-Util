@@ -1,2 +1,2 @@
-#include "../maps/hashheap.hpp"
-#include "../maps/hashtable.hpp"
+//#include "../maps/hashheap.hpp"
+#include "../maps/hashmap.hpp"

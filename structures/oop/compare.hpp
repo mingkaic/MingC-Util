@@ -22,170 +22,91 @@
 //  Copyright (c) 2014 Ming Kai Chen. All rights reserved.
 //
 
+#include <functional>
+
 #pragma once
 #ifndef __COMPARE__H
 #define __COMPARE__H
 // HOW IT WORKS:
 // return true if left and right are equal
 template <typename T>
-using equatable = bool (*) (T left, T right);
+using equatable = std::function<bool (T left, T right)>;
 
 // HOW IT WORKS:
 // return 0 if left and right are equal
 // return > 0 if right > left
 // return < 0 if left < right
 template <typename T>
-using comparable = signed (*) (T left, T right);
+using comparable = std::function<signed (T left, T right)>;
 
 // HOW IT WORKS:
 // return integer representation of input
 template <typename T>
-using hashable = size_t (*) (T);
+using hashable = std::function<long (T)>;
 
 template <typename T>
-struct comparator
+class comparator
 	{
-	equatable<T> equals = NULL;
-
-	comparable<T> compare = NULL;
-
-	hashable<T> hashcode = NULL;
-	};
-
-enum COMPFUNC {
-    EQUALS,
-    COMPARE,
-    HASHCODE,
-    ALL,
-};
-
-// set unassigned comparator obj comparison function 
-// pointers to natural order comp funcs if possible
-// param[out]    obj    reference to comparator object
-// returns void
-template <typename T>
-static void naturalize (comparator<T>& obj);
-
-template <typename T>
-class compManage
-	{
-    private:
-        static comparator<T>* factory;
-
     protected:
-        // constant member copy
-        // naturalize for functions not set
-        comparator<T> C;
+        // compile time connections
+        template <bool Condition, typename U>
+        friend class if_natural;
+
+        // set default operations
+        // param[out]    obj    reference to comparator object
+        // returns void
+        void naturalize (comparator<T>& obj);
+
+        equatable<T> equals;
+
+        comparable<T> compare;
+
+        hashable<T> hashcode;
+
     public:
         // set static factory's equal function
         // param[in]    equals  function pointer with signature
         //                      bool (*) (T, T)
-        // returns true if successfully set, false if already set
-        static bool setEquals (equatable<T> equals)
+        // returns void
+        void setEquals (equatable<T> equals)
             {
-            if (NULL == factory) factory = new comparator<T>;
-            if (NULL == factory->equals)
-                {
-                factory->equals = equals;
-                return true;
-                }
-            else
-                {
-                return false;
-                }
+            this->equals = equals;
             }
 
         // set static factory's compare function
         // param[in]    compare     function pointer with signature
         //                          signed (*) (T, T)
-        // returns true if successfully set, false if already set
-        static bool setCompare (comparable<T> compare)
+        // returns void
+        void setCompare (comparable<T> compare)
             {
-            if (NULL == factory) factory = new comparator<T>;
-            if (NULL == factory->compare)
-                {
-                factory->compare = compare;
-                return true;
-                }
-            else
-                {
-                return false;
-                }
+            this->compare = compare;
             }
 
         // set static factory's hashcode function
         // param[in]    hashcode    function pointer with signature
         //                          size_t (*) (T)
-        // returns true if successfully set, false if already set
-        static bool setHashcode (hashable<T> hashcode)
-            {
-            if (NULL == factory) factory = new comparator<T>;
-            if (NULL == factory->hashcode)
-                {
-                factory->hashcode = hashcode;
-                return true;
-                }
-            else
-                {
-                return false;
-                }
-            }
-
-        // reverts factory function pointers to NULL
-        // param[in]  unset enum COMPFUNC indicating which function to reset
         // returns void
-        static void resetComparator (COMPFUNC f = ALL)
+        void setHashcode (hashable<T> hashcode)
             {
-            comparator<T>* bufferFactory = NULL;
-            if (NULL != factory)
-            	{
-                if (ALL != f)
-                    {
-                    bufferFactory = new comparator<T>;
-                    }
-                switch (f) 
-                    {
-                    case EQUALS:
-                        bufferFactory->compare = factory->compare;
-                        bufferFactory->hashcode = factory->hashcode;
-                        break;
-                    case COMPARE:
-                        bufferFactory->equals = factory->equals;
-                        bufferFactory->hashcode = factory->hashcode;
-                        break;
-                    case HASHCODE:
-                        bufferFactory->equals = factory->equals;
-                        bufferFactory->compare = factory->compare;
-                        break;
-                    case ALL:
-                        break;
-                    }
-                delete factory;
-                factory = bufferFactory;
-            	}
+            this->hashcode = hashcode;
             }
 
         // constructs instance comparator and naturalizes when available
         // @remark default constructor
-        compManage (void)
+        comparator (void)
 			{
-            if (NULL != factory)
-            	{
-				C.equals = factory->equals;
-				C.compare = factory->compare;
-				C.hashcode = factory->hashcode;
-            	}
-			naturalize(C);
+            naturalize(*this);
 			}
 
         // virtual destructor
         // @remark destructor
-        virtual ~compManage() {}
-	};
+        virtual ~comparator() {}
 
-// factory init
-template <typename T>
-comparator<T>* compManage<T>::factory = NULL;
+        // copy assignment operator
+        // @param[in]   src     reference to comparator object to copy from
+        // @return      reference to this after copy assignment
+        comparator<T>& operator = (const comparator<T>& src);
+	};
 
 #include "compare.cpp"
 

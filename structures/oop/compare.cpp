@@ -14,50 +14,98 @@
 #include <string>
 #include <cmath>
 #include <type_traits>
+#include <stdexcept>
+#include "../../utils/memory.hpp"
 
-// is std::string
-static bool equals (std::string s1, std::string s2)
-	{
-	return 0 == s1.compare(s2);
-	}
-
-static signed compare (std::string s1, std::string s2)
-	{
-	return s2.compare(s1);
-	}
-
-static size_t hashcode (std::string s)
-	{
-	size_t n = s.size();
-	size_t hash = 0;
-	for (size_t i = 0; i < n; i++)
-		{
-		hash += s[i]*pow(sizeof(size_t)*8, (n-i-1));
-		}
-	return hash;
-	}
+// compile time connections
+template <bool Condition, typename U>
+class if_natural;
 
 // is_integral and is_floating_point
 template <typename T>
-static bool equals (T e1, T e2)
+struct if_natural<true, T>
 	{
-	return e1 == e2;
-	}
+	static void connect(comparator<T>& obj)
+		{
+		obj.equals = [] (T e1, T e2) 
+			{ 
+			return e1 == e2; 
+			};
+		obj.compare = [] (T e1, T e2) 
+			{ 
+			signed diff = 0;
+			if (e2 > e1) diff = 1;
+			if (e2 < e1) diff = -1;
+			return diff; 
+			};
+		obj.hashcode = [] (T e) 
+			{ 
+			return (size_t) e;
+			};
+		}
+	};
 
-template <typename T>
-static signed compare (T e1, T e2)
+// is std::string
+template <>
+struct if_natural<true, std::string>
 	{
-	signed diff = 0;
-	if (e2 > e1) diff = 1;
-	if (e2 < e1) diff = -1;
-	return diff;
-	}
+	static void connect(comparator<std::string>& obj)
+		{
+		obj.equals = [] (std::string s1, std::string s2) 
+			{
+			return 0 == s1.compare(s2);
+			};
+		obj.compare = [] (std::string s1, std::string s2) 
+			{ 
+			return s2.compare(s1); 
+			};
+		obj.hashcode = [] (std::string s) 
+			{ 
+			size_t n = s.size();
+			size_t hash = 0;
+			for (size_t i = 0; i < n; i++)
+				{
+				hash += s[i]*pow(sizeof(size_t)*8, (n-i-1));
+				}
+			return hash;
+			};
+		}
+	};
 
+// other types
 template <typename T>
-static size_t hashcode (T e)
+struct if_natural<false, T>
 	{
-	return (size_t) e;
-	}
+	static void connect(comparator<T>& obj)
+		{
+		obj.equals = [obj] (T e1, T e2) 
+			{ 
+			if (obj.compare)
+				return 0 == obj.compare(e1, e2);
+			throw std::runtime_error("calling unimplemented equals function");
+			return false;
+			};
+		obj.compare = [obj] (T e1, T e2) 
+			{
+			if (obj.hashcode)
+				{
+				long id1 = obj.hashcode(e1);
+				long id2 = obj.hashcode(e2); 
+				signed diff = 0;
+				if (id2 > id1) diff = 1;
+				if (id2 < id1) diff = -1;
+				return diff;
+				}
+			throw std::runtime_error("calling unimplemented compare function");
+			return 0;
+			};
+		obj.hashcode = [obj] (T e)
+			{
+			throw std::runtime_error("calling unimplemented hashcode function");
+			return 0;
+			};
+		}
+	};
 
 // set unassigned comparator obj comparison function 
 // pointers to natural order comp funcs if possible
@@ -65,16 +113,28 @@ static size_t hashcode (T e)
 // returns void
 
 template <typename T>
-static void naturalize(comparator<T>& obj)
+void comparator<T>::naturalize(comparator<T>& obj)
 	{
-	if (true == std::is_integral<T>::value ||
-		true == std::is_floating_point<T>::value ||
-		true == std::is_same<T, std::string>::value)
-		{
-		obj.equals = equals;
-		obj.compare = compare;
-		obj.hashcode = hashcode;
-		}
+	// change condition here to expand natural type options
+	if_natural<std::is_integral<T>::value || 
+		std::is_floating_point<T>::value || 
+		std::is_same<T, std::string>::value, T>::connect(obj);
+	}
+
+// copy assignment operator
+// @param[in]   src     reference to comparator object to copy from
+// @return      reference to this after copy assignment
+
+template <typename T>
+comparator<T>& comparator<T>::operator = (const comparator<T>& src)
+	{
+    if (&src != this)
+        {
+		equals = src.equals;
+		compare = src.compare;
+		hashcode = src.hashcode;
+        }
+    return *this;
 	}
 
 #endif /* __COMPARE__H */
