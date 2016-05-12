@@ -1,79 +1,87 @@
 //
-//  hashmap.hpp
-//  Map
+//  hashheap.hpp
+//  hybrid priority map
 //
-//  description: hashed structure mapping keys to value 
+//  description: hashmap that uses heaps as buckets
+//               features min key value peek/removal
 //
-//  Created by Ming Kai Chen on 2014-07-15.
-//  Copyright (c) 2014 Ming Kai Chen. All rights reserved.
+//  Created by Ming Kai Chen on 2016-01-30.
+//  Copyright (c) 2016 Ming Kai Chen. All rights reserved.
 //
 
 #pragma once
-#ifndef __HASH_MAP__H
-#define __HASH_MAP__H
+#ifndef __HASH_HEAP__H
+#define __HASH_HEAP__H
 
 #include "../../math/number.hpp"
 #include "../../utils/memory.hpp"
 #include "../oop/compare.hpp"
-#include "../lists/searchlist.hpp"
+#include "../trees/heap.hpp"
 #include "../dcontainers/pair.hpp"
 #include "../dcontainers/wrapper.hpp"
-#include <vector>
 
 namespace map
     {
     template <typename K, typename V>
     using pairptr = spointer<dcontain::pair<K, V> >;
-
+    
     template <typename K, typename V>
-    class hashmap : public comparator<K>
+    class hashheap : public comparator<K>
         {
         private:
             // initialize searchlist equality function
             void pairptr_initialize (void)
                 {
+                pairptr<K, V> nil;
                 for (size_t i = 0; i < numBuckets; i++)
                     {
-                    dictionary[i].setEquals([this](pairptr<K, V> p1, pairptr<K, V> p2)->bool 
+                    dictionary[i].reset(new tree::heap<pairptr<K, V> >(nil));
+                    dictionary[i]->setEquals([this](pairptr<K, V> p1, pairptr<K, V> p2)->bool 
                         {
-                        return this->equals(p1->getKey(), p2->getKey());
+                        return p1 && p2 && this->equals(p1->getKey(), p2->getKey());
                         });
                     }
                 }
 
-            list::searchlist<pairptr<K, V> >* dictionary = NULL;
+            spointer<tree::heap<pairptr<K, V> > >* dictionary = NULL;
             size_t curSize;
             size_t numBuckets;
         public:
-            // constructs an array of searchlists
+            // constructs an array of heap
             // of size 101
             // @remark default constructor
-            hashmap (void);
+            hashheap (void);
 
-            // constructs an array of searchlists
+            // constructs an array of heap
             // of size primed number greater than
             // intendedSize * 2
             // @remark default constructor
-            hashmap (size_t intendedSize);
+            hashheap (size_t intendedSize);
 
             // destroys self content, then copy src content to self
-            // minor issue: searchlist contains smart pointer which 
+            // minor issue: heap contains smart pointer which 
             //              discourages deep copying. unreference pair 
             //              when changing value
             // @remark copy constructor
-            hashmap (const hashmap<K, V>& src);
+            hashheap (const hashheap<K, V>& src);
 
             // destructor
             // @remark destructor
-            virtual ~hashmap (void);
+            ~hashheap (void);
 
             // copy assignment operator
-            // minor issue: searchlist contains smart pointer which 
+            // minor issue: heap contains smart pointer which 
             //              discourages deep copying. unreference pair 
             //              when changing value
-            // @param[in]   src     reference to hashmap object to copy from
+            // @param[in]   src     reference to hashheap object to copy from
             // @return      reference to this after copy assignment
-            hashmap<K, V>& operator = (const hashmap<K, V>& src);
+            hashheap<K, V>& operator = (const hashheap<K, V>& src);
+
+            // get pair with minimum key
+            // @param[]     void
+            // @return smart pointer of pairs removed
+            //          null smart pointer if empty
+            pairptr<K, V> get (void) const;
 
             // get value in key-value pairs into this
             // @param[in]   key     key
@@ -88,20 +96,26 @@ namespace map
             // @return wrapper object value associated with key, 
             // castable to false if there was no associated value
             // castable to true otherwise
-            dcontain::wrapper<V> put (K key, V data);
+            dcontain::wrapper<V> put (K key, V value);
 
             // UNTESTED
             // insert all key-value pairs in other into this
-            // @param[in]   other   reference to another hashmap
+            // @param[in]   other   reference to another hashheap
             // @return void
-            void putAll (const hashmap<K, V>& other);
+            void putAll (const hashheap<K, V>& other);
+
+            // remove pair with minimum key
+            // @param[]     void
+            // @return smart pointer of pairs removed
+            //          null smart pointer if empty
+            pairptr<K, V> remove (void);
 
             // remove key-value association
             // @param[in]   key     Key in the key-value pair
             // @return wrapper object value associated with key, 
             // castable to false if there was no associated value
             // castable to true otherwise
-            dcontain::wrapper<V>  remove (K key);
+            dcontain::wrapper<V> remove (K key);
 
             // UNTESTED
             // determines if key is stored
@@ -137,15 +151,9 @@ namespace map
             // @param[]     void
             // @return      void
             void clear (void);
-            
-            // UNTESTED
-            // returns vectors of keys
-            std::vector<K> hashIntersect (const hashmap<K, V>& src) const;
-            std::vector<K> hashUnion (const hashmap<K, V>& src) const;
-            std::vector<K> hashDifference (const hashmap<K, V>& src) const;
         };
 
-    #include "hashmap.cpp"
+    #include "hashheap.cpp"
     }
 
-#endif /* __HASH_MAP__H */
+#endif /* __HASH_HEAP__H */

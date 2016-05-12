@@ -24,6 +24,7 @@ namespace list
         private:
             T* array;
             size_t allocSize;
+            T defaultval;
 
             // handles the dynamic checking and expansion of the array
             // @param[in]   expand     expansion rate: next size = cur size * expand
@@ -33,6 +34,11 @@ namespace list
             // allocates an array with default size of 128
             // @remark default constructor
             dynamicarr (void);
+
+            // allocates an array with default size of 128
+            // fills this with default value
+            // @remark constructor
+            dynamicarr (T defaultval);
 
             // destroys self content, then copy src content to self
             // @remark copy constructor
@@ -51,6 +57,11 @@ namespace list
             // @param[in]   index     integer index of the accessing element in arr
             // @return      reference to data at index
             T& operator [] (size_t index);
+
+            // overloaded constant bracket reference operator
+            // @param[in]   index     integer index of the accessing element in arr
+            // @return      reference to data at index
+            T operator [] (size_t index) const;
 
             // finds the index of the first instance of element
             // determines equality using input function following signature: bool (*)(const T&, const T&);

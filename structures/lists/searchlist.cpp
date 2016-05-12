@@ -17,7 +17,7 @@
 // @remark copy constructor
 
 template <class T>
-searchlist<T>::searchlist (const searchlist& src) : deque<T>(src)
+searchlist<T>::searchlist (const searchlist& src) : deque<T>(src), comparator<T>(src)
     {
     }
 

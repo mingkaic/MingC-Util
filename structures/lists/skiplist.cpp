@@ -163,7 +163,7 @@ skiplist<T>::skiplist (void) : head(NULL)
 // @remark copy constructor
 	
 template <class T>
-skiplist<T>::skiplist (const skiplist<T>& src) : head(NULL)
+skiplist<T>::skiplist (const skiplist<T>& src) : head(NULL), comparator<T>(src)
 	{
 	if (NULL != src.head)
 		{

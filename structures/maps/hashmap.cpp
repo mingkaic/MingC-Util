@@ -17,33 +17,6 @@
 
 #define DEFAULT_NBUCKET 101
 
-// determines if n is a prime number
-static bool isPrime (size_t n)
-    {
-    for (size_t i = 3; i < n/2; i += 2)
-        {
-        if (0 == n % i)
-            {
-            return false;
-            }
-        }
-    return true;
-    }
-
-// finds the nearest prime of optimus
-static size_t nearestPrime (size_t optimus)
-    {
-    if (optimus == 2)
-        return 2;
-    else if (0 == optimus % 2)
-        optimus++;
-    while (!isPrime(optimus++))
-        {
-        optimus++;
-        }
-    return optimus;
-    }
-
 // constructs an array of searchlists
 // of size 101
 // @remark default constructor
@@ -75,7 +48,8 @@ hashmap<K, V>::hashmap (size_t intendedSize) : curSize(0)
 // @remark copy constructor
 
 template <typename K, typename V>
-hashmap<K, V>::hashmap (const hashmap& src) : numBuckets(src.numBuckets), curSize(src.curSize)
+hashmap<K, V>::hashmap (const hashmap& src) : 
+    numBuckets(src.numBuckets), curSize(src.curSize), comparator<K>(src)
     {
     dictionary = new list::searchlist<pairptr<K, V> >[numBuckets];
     pairptr_initialize();
@@ -154,6 +128,7 @@ dcontain::wrapper<V> hashmap<K, V>::put (K key, V data)
     {
     dcontain::wrapper<V> pass; // empty wrapper (bad)
     size_t hashIndex = this->hashcode(key) % numBuckets;
+    
     pairptr<K, V> sample(new dcontain::pair<K, V>(key, data));
     signed searchIndex = dictionary[hashIndex].search(sample);
     if (searchIndex > -1)
@@ -249,10 +224,10 @@ bool hashmap<K, V>::containsValue (V value, equatable<V> eq) const
     size_t hashIndex;
     signed searchIndex;
     bool found = false;
-    for (size_t i = 0; i < numBuckets; i++)
+    for (size_t i = 0; i < numBuckets && false == found; i++)
         {
         listsize = dictionary[i].size();
-        for (size_t j = 0; j < listsize; j++)
+        for (size_t j = 0; j < listsize && false == found; j++)
             {
             pairptr<K, V> sample = dictionary[i].nPeek(j);
             found = found || eq(value, sample->getValue());

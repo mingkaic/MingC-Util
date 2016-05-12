@@ -13,8 +13,8 @@ TEST(INIT, deque)
 
 TEST(INIT, dynamicarr)
 	{
-	list::dynamicarr<size_t> 	inst;
-	list::dynamicarr<size_t>* 	ptr = new list::dynamicarr<size_t>();
+	list::dynamicarr<size_t> 	inst(0);
+	list::dynamicarr<size_t>* 	ptr = new list::dynamicarr<size_t>(0);
 	EXPECT_EQ(0, inst[0]);
 	EXPECT_EQ(0, (*ptr)[0]);
 	delete ptr;
@@ -113,8 +113,8 @@ TEST(DATA_ENTRY, deque)
 
 TEST(DATA_ENTRY, dynamicarr)
 	{
-	list::dynamicarr<double>  arr;
-	list::dynamicarr<bool>	arr2;
+	list::dynamicarr<double>  arr(0);
+	list::dynamicarr<bool>	arr2(false);
 	std::vector<double> store;
 	bool verifier[101] = {false};
 	size_t index = 0;
@@ -315,18 +315,18 @@ TEST(COPY, deque)
 
 TEST(COPY, dynamicarr)
 	{
-	list::dynamicarr<double>  empty;
+	list::dynamicarr<double>  empty(0);
 	list::dynamicarr<double>  emptycopy(empty);
-	list::dynamicarr<double>  emptycopyassign;
+	list::dynamicarr<double>  emptycopyassign(0);
 	emptycopyassign = empty;
 
 	ASSERT_EQ(empty[0], 0);
 	EXPECT_EQ(emptycopy[0], 0);
 	EXPECT_EQ(emptycopyassign[0], 0);
 
-	list::dynamicarr<double> 		orig;
-	list::dynamicarr<double> 		copyassign;
-	list::dynamicarr<double> 		recopyassign;
+	list::dynamicarr<double> 		orig(0);
+	list::dynamicarr<double> 		copyassign(0);
+	list::dynamicarr<double> 		recopyassign(0);
 	std::vector<double> store;
 	size_t index = 0;
 

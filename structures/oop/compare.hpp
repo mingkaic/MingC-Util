@@ -98,6 +98,13 @@ class comparator
             naturalize(*this);
 			}
 
+        comparator (const comparator& src)
+            {
+            equals = src.equals;
+            compare = src.compare;
+            hashcode = src.hashcode;
+            }
+
         // virtual destructor
         // @remark destructor
         virtual ~comparator() {}

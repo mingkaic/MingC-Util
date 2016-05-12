@@ -10,6 +10,8 @@
 
 #ifdef __DYNAMIC_ARR__H
 
+#include <algorithm>
+
 #define DEFAULT_SIZE 128
 
 // handles the dynamic checking and expansion of the array
@@ -21,8 +23,11 @@ void dynamicarr<T>::dynamicSize (size_t expand)
     {
     size_t newSize = allocSize*expand;
     T* newarray = new T[newSize];
-    memset(newarray+newSize-allocSize, 0, sizeof(T)*(newSize-allocSize));
-    memcpy(newarray, array, sizeof(T)*newSize);
+    std::fill(newarray+newSize-allocSize, newarray+newSize, defaultval);
+    for (size_t i = 0; i < newSize; i++)
+        {
+        newarray[i] = array[i];
+        }
     delete[] array;
     array = newarray;
     allocSize = newSize;
@@ -35,17 +40,32 @@ template <class T>
 dynamicarr<T>::dynamicarr (void) : allocSize(DEFAULT_SIZE)
     {
     array = new T[allocSize];
-    memset(array, 0, sizeof(T)*allocSize);
+    std::fill(array, array+allocSize, defaultval);
+    }
+
+// allocates an array with default size of 128
+// fills this with default value
+// @remark constructor
+
+template <class T>
+dynamicarr<T>::dynamicarr (T defaultval) : allocSize(DEFAULT_SIZE), defaultval(defaultval)
+    {
+    array = new T[allocSize];
+    std::fill(array, array+allocSize, defaultval);
     }
 
 // destroys self content, then copy src content to self
 // @remark copy constructor
 
 template <class T>
-dynamicarr<T>::dynamicarr (const dynamicarr &src) : allocSize(src.allocSize)
+dynamicarr<T>::dynamicarr (const dynamicarr &src) : 
+    allocSize(src.allocSize), defaultval(src.defaultval), comparator<T>(src)
     {
     array = new T[allocSize];
-    memcpy(array, src.array, sizeof(T)*allocSize);
+    for (size_t i = 0; i < allocSize; i++)
+        {
+        array[i] = src.array[i];
+        }
     }
 
 // destructor
@@ -69,8 +89,12 @@ dynamicarr<T>& dynamicarr<T>::operator = (const dynamicarr<T>& src)
         {
         delete[] array;
         allocSize = src.allocSize;
+        defaultval = src.defaultval;
         array = new T[allocSize];
-        memcpy(array, src.array, sizeof(T)*allocSize);
+        for (size_t i = 0; i < allocSize; i++)
+            {
+            array[i] = src.array[i];
+            }
         }
     return *this;
     }
@@ -87,6 +111,21 @@ T& dynamicarr<T>::operator [] (size_t index)
         dynamicSize(index);
         }
         
+    return array[index];
+    }
+
+// overloaded constant bracket reference operator
+// @param[in]   index     integer index of the accessing element in arr
+// @return      reference to data at index
+
+template <class T>
+T dynamicarr<T>::operator [] (size_t index) const
+    {
+    if (index > allocSize)
+        {
+        throw std::runtime_error("index out of bounds");
+        }
+
     return array[index];
     }
 

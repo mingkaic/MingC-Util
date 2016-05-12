@@ -15,7 +15,8 @@
 #include <cmath>
 #include <type_traits>
 #include <stdexcept>
-#include "../../utils/memory.hpp"
+#include "../dcontainers/pcontainer.hpp"
+
 
 // compile time connections
 template <bool Condition, typename U>
@@ -56,7 +57,7 @@ struct if_natural<true, std::string>
 			return 0 == s1.compare(s2);
 			};
 		obj.compare = [] (std::string s1, std::string s2) 
-			{ 
+			{
 			return s2.compare(s1); 
 			};
 		obj.hashcode = [] (std::string s) 
@@ -68,6 +69,27 @@ struct if_natural<true, std::string>
 				hash += s[i]*pow(sizeof(size_t)*8, (n-i-1));
 				}
 			return hash;
+			};
+		}
+	};
+
+// is pcontainer
+template <typename T>
+struct if_natural<true, dcontain::pcontainer<T> >
+	{
+	static void connect(comparator<std::string>& obj)
+		{
+		obj.equals = [] (dcontain::pcontainer<T> p1, dcontain::pcontainer<T> p2) 
+			{
+			return p1.getPriority() == p2.getPriority();
+			};
+		obj.compare = [] (dcontain::pcontainer<T> p1, dcontain::pcontainer<T> p2) 
+			{ 
+			return (signed) p2.getPriority() - p1.getPriority();
+			};
+		obj.hashcode = [] (dcontain::pcontainer<T> p) 
+			{
+			return p.getPriority();
 			};
 		}
 	};
