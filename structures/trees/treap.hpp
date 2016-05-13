@@ -1,66 +1,112 @@
 //
-//  bstree.hpp
+//  treap.h
 //  Tree
 //
-//  description: binary tree search
+//  description: randomized binary search tree
 //
 //  Created by Mingkai Chen on 2016-01-18.
 //  Copyright © 2016 Mingkai Chen. All rights reserved.
 //
 
 #pragma once
-#ifndef __BSTREE__H
-#define __BSTREE__H
+#ifndef __TREAP__H
+#define __TREAP__H
 
-#include <vector>
+#include "../dcontainers/gnode.hpp"
 #include "../oop/compare.hpp"
-#include "../dcontainers/treenode.hpp"
 
 namespace tree
     {
     template <typename T>
-    class bstree : comparator<T>
+    class prinode : public dcontain::gnode<T>
         {
         private:
-            dcontain::treenode<T>* root;
+            size_t priority;
+        public:
+            prinode<T>* left;
+            prinode<T>* right;
+            prinode<T>* parent;
+            
+            // constructs node with data
+            // @remark constructor
+            prinode (T data);
+            
+            // constructs node with data and determined priority
+            // @remark constructor
+            prinode (T data, size_t priority);
+
+            // destructor
+            // @remark destructor
+            ~prinode (void) {}
+            
+            // deletes self and children
+            void cascadeDelete (void);
+
+            // copies self and children
+            prinode<T>* cascadeCopy (void) const;
+
+            // change data content
+            void injectData (T data) { this->dataInit(data); }
+            
+            void copy (const prinode<T>* ptr) { 
+                this->dataInit(ptr->data);
+                priority = ptr->priority;
+            }
+
+            // get priority value
+            size_t getPriority() const { return priority; }
+        };
+
+    template <typename T>
+    class treap : public comparator<T>
+        {
+        private:
+            prinode<T>* root;
+
+            treap* split (void);
+            void merge (treap* other);
+
+            // rotate node section
+            // @param[out]  parent      pointer to the pivot node
+            // @param[in]   rotateLeft  true if right child should become new parent
+            // @return void
+            void rotate(prinode<T>* parent, bool rotateLeft);
 
             // search for key in subtree i_root
             // @param[in]   key   T typed data to search for
             // return   NULL if root is NULL
-            //          pointer to root (if root contains key)
-            //          pointer to the parent to node containing key
-            dcontain::treenode<T>* BinSearch (T key, dcontain::treenode<T>* i_root) const;
+            //          pointer to node containing key
+            prinode<T>* BinSearch (T key, prinode<T>* i_root) const;
 
             // get the successor of subtree rooted by i_root
-            // @param[in]   i_root  dcontain::treenode pointer root of subtree
+            // @param[in]   i_root  rbnode pointer root of subtree
             // return   NULL if root right is NULL
-            //          pointer to successor's parent 
-            //          (which is root if right node has no left child)
-            dcontain::treenode<T>* successorParent (dcontain::treenode<T>* i_root);
+            //          pointer to successor
+            prinode<T>* successor (prinode<T>* i_root);
 
             // recurse through this tree in order
             // @param[in]   root    pointer to root of subtree to recurse through
             // @param[in]   func    function to perform on each node
             // return  void
-            void completeRecurse (dcontain::treenode<T>* root, 
-                                std::function<void(dcontain::treenode<T>*)> func) const;
+            void completeRecurse (prinode<T>* root, 
+                                std::function<void(prinode<T>*)> func) const;
         public:
             // constructs NULL root
             // @remark default constructor
-            bstree (void);
+            treap (void) : root(NULL) {}
 
             // destroys self content, then copy src content to self
             // @remark copy constructor
-            bstree (const bstree<T>& src);
+            treap (const treap<T>& src);
 
             // destructor
             // @remark destructor
-            virtual ~bstree (void);
+            virtual ~treap (void);
 
             // copy assignment operator
-            // @param[in]   src     reference to bstree object to copy from
+            // @param[in]   src     reference to treap object to copy from
             // @return      reference to this after copy assignment
-            bstree<T>& operator = (const bstree<T>& src);
+            treap<T>& operator = (const treap<T>& src);
 
             // determine if key is in tree
             // @param[in]   key     key
@@ -83,6 +129,13 @@ namespace tree
             // castable to true otherwise
             dcontain::wrapper<T> remove (T key);
 
+            dcontain::wrapper<T> peekTop (void);
+
+            // bulk ops
+            void tr_union();
+            void tr_intersection();
+            void tr_difference();
+
             // creates a searchlist copy of this tree in order
             // @param[]  void
             // @return a searchlist of this tree
@@ -104,7 +157,7 @@ namespace tree
             void clear (void);
         };
 
-    #include "bstree.cpp"
+    #include "treap.cpp"
     }
 
-#endif /* __BSTREE__H */
+#endif /* __TREAP__H */

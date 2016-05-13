@@ -13,14 +13,14 @@
 #define __HEAP__H
 
 #include "../oop/compare.hpp"
-#include "../dcontainers/treenode.hpp"
 #include "../lists/dynamicarr.hpp"
+#include "../dcontainers/treenode.hpp"
 #include "../dcontainers/wrapper.hpp"
 
 namespace tree
 	{
 	// current implementation: min heap
-	template <class T>
+	template <typename T>
 	class heap : comparator<T>
 		{
 		private:

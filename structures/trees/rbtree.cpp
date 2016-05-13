@@ -49,7 +49,7 @@ void rbnode<T>::cascadeDelete (void)
 // copies self and children
 
 template <typename T>
-rbnode<T>* rbnode<T>::cascadeCopy (void)
+rbnode<T>* rbnode<T>::cascadeCopy (void) const
     {
     rbnode<T>* cpy = new rbnode<T>(this->data, isBlack);
 
@@ -227,7 +227,7 @@ rbnode<T>* rbtree<T>::BinSearch (T key, rbnode<T>* i_root) const
 
 // get the successor of subtree rooted by i_root
 // @param[in]   i_root  rbnode pointer root of subtree
-// return   NULL if root right is NULL
+// return   root if root right is NULL
 //          pointer to successor
 
 template <typename T>
@@ -254,7 +254,7 @@ rbnode<T>* rbtree<T>::successor (rbnode<T>* i_root)
 
 template <typename T>
 void rbtree<T>::completeRecurse (rbnode<T>* root, 
-                    std::function<void(dcontain::treenode<T>*)> func) const
+                    std::function<void(rbnode<T>*)> func) const
     {
     if (NULL != root)
         {
@@ -347,7 +347,6 @@ template <typename T>
 dcontain::wrapper<T> rbtree<T>::put (T key)
     {
     dcontain::wrapper<T> pass;
-    bool childIsLeft = false;
     
     // find primary insertion place:
     //      NULL -> empty tree,
@@ -374,7 +373,7 @@ dcontain::wrapper<T> rbtree<T>::put (T key)
         bool parentIsLeft = false;
         child->parent = topNode;
         
-        childIsLeft = 0 > this->compare(topNode->getData(), key);
+        bool childIsLeft = 0 > this->compare(topNode->getData(), key);
         if (true == childIsLeft)
             {
             topNode->left = child;
@@ -498,7 +497,7 @@ template <typename T>
 std::vector<T> rbtree<T>::getList (void) const
     {
     std::vector<T> sample;
-    completeRecurse(root, [&sample](dcontain::treenode<T>* root) 
+    completeRecurse(root, [&sample](rbnode<T>* root) 
         {
         sample.push_back(root->getData());
         });
@@ -513,7 +512,7 @@ template <typename T>
 size_t rbtree<T>::size (void) const
     {
     size_t count = 0;
-    completeRecurse(root, [&count](dcontain::treenode<T>* root) 
+    completeRecurse(root, [&count](rbnode<T>* root) 
         {
         count++;
         });

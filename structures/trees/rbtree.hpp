@@ -13,8 +13,8 @@
 #define __RB_TREE__H
 
 #include <vector>
-#include "../dcontainers/gnode.hpp"
 #include "../oop/compare.hpp"
+#include "../dcontainers/gnode.hpp"
 
 namespace tree
     {
@@ -43,7 +43,7 @@ namespace tree
             void cascadeDelete (void);
 
             // copies self and children
-            rbnode<T>* cascadeCopy (void);
+            rbnode<T>* cascadeCopy (void) const;
 
             // change data content
             void injectData (T data) {this->dataInit(data);}
@@ -84,7 +84,7 @@ namespace tree
             // @param[in]   func    function to perform on each node
             // return  void
             void completeRecurse (rbnode<T>* root, 
-                                std::function<void(dcontain::treenode<T>*)> func) const;
+                                std::function<void(rbnode<T>*)> func) const;
         public:
             // constructs NULL root
             // @remark default constructor

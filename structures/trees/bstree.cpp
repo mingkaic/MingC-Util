@@ -16,7 +16,7 @@
 //          pointer to root (if root contains key)
 //          pointer to the parent to node containing key otherwise
 
-template <class T>
+template <typename T>
 dcontain::treenode<T>* bstree<T>::BinSearch (T key, dcontain::treenode<T>* i_root) const
     {
     dcontain::treenode<T>* parent;
@@ -51,7 +51,7 @@ dcontain::treenode<T>* bstree<T>::BinSearch (T key, dcontain::treenode<T>* i_roo
 //          pointer to successor's parent 
 //          (which is root if right node has no left child)
 
-template <class T>
+template <typename T>
 dcontain::treenode<T>* bstree<T>::successorParent (dcontain::treenode<T>* i_root)
     {
     dcontain::treenode<T>* success = i_root;
@@ -76,7 +76,7 @@ dcontain::treenode<T>* bstree<T>::successorParent (dcontain::treenode<T>* i_root
 // @param[in]   func    function to perform on each node
 // return  void
 
-template <class T>
+template <typename T>
 void bstree<T>::completeRecurse (dcontain::treenode<T>* root, 
     std::function<void(dcontain::treenode<T>*)> func) const
     {
@@ -97,7 +97,7 @@ void bstree<T>::completeRecurse (dcontain::treenode<T>* root,
 // constructs NULL root
 // @remark default constructor
 
-template <class T>
+template <typename T>
 bstree<T>::bstree (void) : root(NULL)
     {
     }
@@ -105,7 +105,7 @@ bstree<T>::bstree (void) : root(NULL)
 // destroys self content, then copy src content to self
 // @remark copy constructor
 
-template <class T>
+template <typename T>
 bstree<T>::bstree (const bstree<T>& src) : root(NULL), comparator<T>(src)
     {
     if (NULL != src.root)
@@ -117,7 +117,7 @@ bstree<T>::bstree (const bstree<T>& src) : root(NULL), comparator<T>(src)
 // destructor
 // @remark destructor
 
-template <class T>
+template <typename T>
 bstree<T>::~bstree (void)
     {
     clear();
@@ -127,7 +127,7 @@ bstree<T>::~bstree (void)
 // @param[in]   src     reference to bstree object to copy from
 // @return      reference to this after copy assignment
 
-template <class T>
+template <typename T>
 bstree<T>& bstree<T>::operator = (const bstree<T>& src)
     {
     comparator<T>::operator = (src);
@@ -148,7 +148,7 @@ bstree<T>& bstree<T>::operator = (const bstree<T>& src)
 // castable to false if there was no associated value
 // castable to true otherwise
 
-template <class T>
+template <typename T>
 dcontain::wrapper<T> bstree<T>::get (T key) const
     {
     dcontain::wrapper<T> pass;
@@ -180,7 +180,7 @@ dcontain::wrapper<T> bstree<T>::get (T key) const
 // castable to false if there was no associated value
 // castable to true otherwise
 
-template <class T>
+template <typename T>
 dcontain::wrapper<T> bstree<T>::put (T key)
     {
     dcontain::wrapper<T> pass;
@@ -234,7 +234,7 @@ dcontain::wrapper<T> bstree<T>::put (T key)
 // castable to false if there was no associated value
 // castable to true otherwise
 
-template <class T>
+template <typename T>
 dcontain::wrapper<T> bstree<T>::remove (T key)
     {
     dcontain::wrapper<T> pass;
@@ -308,7 +308,7 @@ dcontain::wrapper<T> bstree<T>::remove (T key)
 // @param[]  void
 // @return a searchlist of this tree
 
-template <class T>
+template <typename T>
 std::vector<T> bstree<T>::getList (void) const
     {
     std::vector<T> sample;
@@ -323,7 +323,7 @@ std::vector<T> bstree<T>::getList (void) const
 // @param[]  void
 // @return size_t number of nodes in this tree
 
-template <class T>
+template <typename T>
 size_t bstree<T>::size (void) const
     {
     size_t count = 0;
@@ -338,7 +338,7 @@ size_t bstree<T>::size (void) const
 // @param[]  void
 // @return void
 
-template <class T>
+template <typename T>
 void bstree<T>::clear (void)
     {
     if (NULL != root)

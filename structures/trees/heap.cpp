@@ -10,15 +10,13 @@
 
 #ifdef __HEAP__H
 
-#include <stdexcept>
-
 // swap between indices in arr
 // @param[out]	arr 	pointer to dynamic array
 // @param[in]	index1 	size_t index to swap with
 // @param[in]	index2 	size_t index to swap with
 // @return	void
 
-template <class T>
+template <typename T>
 void swap (list::dynamicarr<T>& arr, size_t index1, size_t index2)
 	{
 	T buffer = arr[index1];
@@ -30,7 +28,7 @@ void swap (list::dynamicarr<T>& arr, size_t index1, size_t index2)
 // @param[in]	index	size_t index to fix the heap around
 // @return 	void
 
-template <class T>
+template <typename T>
 void heap<T>::reheap (size_t index)
 	{
 	// bubble up
@@ -63,7 +61,7 @@ void heap<T>::reheap (size_t index)
 // constructs empty heap
 // @remark default constructor
 
-template <class T>
+template <typename T>
 heap<T>::heap (void) : curSize(0)
 	{
 	}
@@ -71,7 +69,7 @@ heap<T>::heap (void) : curSize(0)
 // constructs empty heap with default value
 // @remark constructor
 
-template <class T>
+template <typename T>
 heap<T>::heap (T defaultval) : curSize(0), defaultval(defaultval)
 	{
 	}
@@ -79,7 +77,7 @@ heap<T>::heap (T defaultval) : curSize(0), defaultval(defaultval)
 // destroys self content, then copy src content to self
 // @remark copy constructor
 	
-template <class T>
+template <typename T>
 heap<T>::heap (const heap<T>& src) : 
 	curSize(src.curSize), defaultval(src.defaultval), comparator<T>(src)
 	{
@@ -90,7 +88,7 @@ heap<T>::heap (const heap<T>& src) :
 // @param[in]   src     reference to heap object to copy from
 // @return      reference to this after copy assignment
 	
-template <class T>
+template <typename T>
 heap<T>& heap<T>::operator = (const heap<T>& src)
 	{
     comparator<T>::operator = (src);
@@ -107,7 +105,7 @@ heap<T>& heap<T>::operator = (const heap<T>& src)
 // @param[in]   data	T typed data
 // @return void
 	
-template <class T>
+template <typename T>
 void heap<T>::put (T data)
 	{
 	T buffer;
@@ -121,7 +119,7 @@ void heap<T>::put (T data)
 // castable to false if the heap is empty
 // castable to true otherwise
 	
-template <class T>
+template <typename T>
 dcontain::wrapper<T> heap<T>::get (void) const
 	{
 	dcontain::wrapper<T> pass;
@@ -139,7 +137,7 @@ dcontain::wrapper<T> heap<T>::get (void) const
 // castable to false if data is not in heap
 // castable to true otherwise
 
-template <class T>
+template <typename T>
 dcontain::wrapper<T> heap<T>::get (T data) const
 	{
 	dcontain::wrapper<T> pass;
@@ -161,7 +159,7 @@ dcontain::wrapper<T> heap<T>::get (T data) const
 // castable to false if the heap is empty
 // castable to true otherwise
 
-template <class T>
+template <typename T>
 dcontain::wrapper<T> heap<T>::remove (void)
 	{
 	dcontain::wrapper<T> pass;
@@ -181,7 +179,7 @@ dcontain::wrapper<T> heap<T>::remove (void)
 // castable to false if there was no associated value
 // castable to true otherwise
 
-template <class T>
+template <typename T>
 dcontain::wrapper<T> heap<T>::remove (T data)
 	{
 	dcontain::wrapper<T> pass;
